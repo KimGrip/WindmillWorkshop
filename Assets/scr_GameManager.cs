@@ -139,7 +139,9 @@ public class scr_GameManager : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics2D.Raycast(toMouse.origin, toMouse.direction, LayerMask.NameToLayer("button")).transform != null)
+            int layer_mask = LayerMask.GetMask("button");
+
+            if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
             {
                 Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
                 Debug.Log(obj.name);
@@ -175,11 +177,9 @@ public class scr_GameManager : MonoBehaviour
 
     void ScaleButton(Transform obj)
     {
-
-
-            if (!scaleUpwards)
+        if (!scaleUpwards)
         {
-            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(0.7f, minMaxButtonScale.x, obj.localScale.z), buttonMorphSpeed);
+            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, obj.localScale.z), buttonMorphSpeed);
             if (obj.localScale.y <= minMaxButtonScale.x)
             {
                 scaleUpwards = true;
@@ -198,10 +198,10 @@ public class scr_GameManager : MonoBehaviour
     Transform GetMorphableButton()
     {
         Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics2D.Raycast(toMouse.origin, toMouse.direction, LayerMask.NameToLayer("button")).transform)
+        int layer_mask = LayerMask.GetMask("button");
+        if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f,layer_mask))
         {
             Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
-            Debug.Log(obj.name);
             return obj;
         }
         return null;
