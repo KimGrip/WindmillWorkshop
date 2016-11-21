@@ -140,14 +140,6 @@ public class scr_CameraScript : MonoBehaviour
         Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x); // The max and min X pos for Camera.
         Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y); // The max and min Y pos for Camera.       
         m_CameraTF.position = new Vector3(Mathf.Clamp(m_CameraTF.position.x, xLimit.x, xLimit.y), Mathf.Clamp(m_CameraTF.position.y, yLimit.x, yLimit.y), m_CameraTF.position.z);
-
-        m_CameraTF.position = new Vector3(Mathf.Clamp(m_CameraTF.position.x, xLimit.x, xLimit.y), //Clamps X pos
-            Mathf.Clamp(m_CameraTF.position.y, yLimit.x, yLimit.y), m_CameraTF.position.z);   // Clamps Y Pos
-
- 
-        m_CameraTF.position = new Vector3(Mathf.Clamp(m_CameraTF.position.x, xLimit.x, xLimit.y), Mathf.Clamp(m_CameraTF.position.y, yLimit.x, yLimit.y), m_CameraTF.position.z);
-        m_CameraTF.position = new Vector3(Mathf.Clamp(m_CameraTF.position.x, xLimit.x, xLimit.y), //Clamps X pos
-            Mathf.Clamp(m_CameraTF.position.y, yLimit.x, yLimit.y), m_CameraTF.position.z);   // Clamps Y Pos
     }
     public void JumpToLastMovementPoint()
     {

@@ -23,7 +23,6 @@ public class scr_bagMovement : MonoBehaviour
     public float bouncePower;
     private float throwPower;
     public float throwStrenght;
-
     public float m_fullThrowDistance;
 
     private Vector3 bagTempPos;
@@ -43,7 +42,7 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
-        bagThrowBoundaries = GameObject.Find("Bag_Spawn_pos").GetComponent<BoxCollider2D>();
+        bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
         aimingArrow = GameObject.FindGameObjectWithTag("aimarrow");
         aimingArrow.SetActive(false);
         BS = BagState.idle;
@@ -158,21 +157,17 @@ public class scr_bagMovement : MonoBehaviour
         Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
         float y = objectPos.y;
         float x = objectPos.x;
-        Vector2 clamp = ClampIdleBagMovement();
-       bag.transform.position = new Vector3(clamp.x, clamp.y, objectPos.z);
+        transform.position = new Vector3(x, y, 0);
+        ClampBagPos();
     }
-    Vector2 ClampIdleBagMovement()
+    void ClampBagPos()
     {
-        Vector2 x_minMAx = new Vector2(bagThrowBoundaries.bounds.extents.x, bagThrowBoundaries.bounds.extents.y); //returns the height and width to center.
+        Vector2 x_minMAx = new Vector2(bagThrowBoundaries.bounds.extents.x, bagThrowBoundaries.bounds.extents.y); //returns the height and width to center
         Vector2 boxPos = bagThrowBoundaries.transform.position;
+        // smallest, bounds - pos
         Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x); 
-        Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);
-        Vector3 pos = new Vector3();
-
-        pos = new Vector3(Mathf.Clamp(pos.x, xLimit.x, xLimit.y), //Clamps X pos
-        Mathf.Clamp(pos.y, yLimit.x, yLimit.y), 0);
-
-        return pos;
+        Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);     
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, xLimit.x, xLimit.y), Mathf.Clamp(transform.position.y, yLimit.x, yLimit.y), transform.position.z);
     }
     void BagFlyingState()
     {
@@ -182,12 +177,9 @@ public class scr_bagMovement : MonoBehaviour
         Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
         Vector2 direction;
 
-
         direction = objectPos - bagTempPos;
         direction.Normalize();
         DecideThrowStrenght(objectPos, bagTempPos);
-
-
 
         if (remainingBounces <= 0)
         {

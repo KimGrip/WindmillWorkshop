@@ -21,7 +21,6 @@ public class scr_GameManager : MonoBehaviour
     public int MaxWinParticlesNeeded;
     private scr_CameraScript m_Camera;
     private scr_IngameSoundManager ISM;
-//    private GameObject m_EndGameMenu;
     private bool m_showEndGameMenu;
     private bool m_DisplayOnce;
     public Transform MedalSpawnPosition;
@@ -33,14 +32,12 @@ public class scr_GameManager : MonoBehaviour
     public float buttonMorphSpeed;
     public Vector2 minMaxButtonScale;
     private bool scaleUpwards;
-
-
     // Use this for initialization
     void Awake()
     {
         //m_EndGameMenu = GameObject.Find("EndGameMenu");
         //m_EndGameMenu.SetActive(false);
-
+        
         OpenSurveyOnce = true;
         m_BT = BagType.def;
         Time.timeScale = 1;
@@ -144,7 +141,6 @@ public class scr_GameManager : MonoBehaviour
             if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
             {
                 Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
-                Debug.Log(obj.name);
                 if (obj.name == "QuitGame")
                 {
                     Application.Quit();
@@ -205,7 +201,6 @@ public class scr_GameManager : MonoBehaviour
             return obj;
         }
         return null;
-
     }
 
     // Update is called once per frame
