@@ -26,9 +26,9 @@ public class spawnParticles : MonoBehaviour
     private bool m_exploding;
     private int m_frameCounter;
     private int index;
-	// Use this for initialization
 	void Start () 
     {
+        
         BM = this.GetComponent<scr_bagMovement>();
         m_frameCounter = 1;
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
@@ -38,7 +38,6 @@ public class spawnParticles : MonoBehaviour
         objectPooler = GameObject.FindGameObjectWithTag("pooler").GetComponent<scr_obp>();
         m_exploding = false;
 	}
-	// Update is called once per frame
 	void Update () 
     {
         if(EnableRightClickSpawning)
@@ -58,7 +57,7 @@ public class spawnParticles : MonoBehaviour
             ExplodeBag();
         }
     }
-    void ExplodeBag()
+    public void ExplodeBag()
     {
         ISM.PlayBagBreak();
      //   int maxWinAmount = GM.GetMaxWinParticles() * BM.GetRemainingBounces() / BM.GetMaxBounces();

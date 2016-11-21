@@ -16,7 +16,8 @@ public class scr_bagMovement : MonoBehaviour
     private scr_IngameSoundManager ISG;
     private scr_GameManager GM;
     private ParticleSystem PS;
- 
+    private BoxCollider2D bagThrowBoundaries;
+
     public int bounces;
     private int remainingBounces;
     public float bouncePower;
@@ -24,11 +25,7 @@ public class scr_bagMovement : MonoBehaviour
     public float throwStrenght;
 
     public float m_fullThrowDistance;
-    private Vector2 m_clampedStartingPosY;
-    private Vector2 m_clampedStartingPosX;
 
-    public float m_clampedYPosSize;
-    public float m_clampedXPosSize;
     private Vector3 bagTempPos;
     public bool isThrown;
 
@@ -46,9 +43,7 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
-
-        PS.enableEmission = false;
-
+        bagThrowBoundaries = GameObject.Find("Bag_Spawn_pos").GetComponent<BoxCollider2D>();
         aimingArrow = GameObject.FindGameObjectWithTag("aimarrow");
         aimingArrow.SetActive(false);
         BS = BagState.idle;
@@ -57,11 +52,8 @@ public class scr_bagMovement : MonoBehaviour
         bagRB.isKinematic = true;
         SP = gameObject.GetComponent<spawnParticles>();
         PS.enableEmission = false;
+        
 
-        m_clampedStartingPosY.x = bag.transform.position.y - m_clampedYPosSize; // min
-        m_clampedStartingPosY.y = bag.transform.position.y + m_clampedYPosSize; // max
-        m_clampedStartingPosX.x = bag.transform.position.x - m_clampedXPosSize;
-        m_clampedStartingPosX.y = bag.transform.position.x + m_clampedXPosSize;
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
         remainingBounces = bounces;
@@ -166,9 +158,21 @@ public class scr_bagMovement : MonoBehaviour
         Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
         float y = objectPos.y;
         float x = objectPos.x;
-        y = Mathf.Clamp(y, m_clampedStartingPosY.x, m_clampedStartingPosY.y);
-        x = Mathf.Clamp(x, m_clampedStartingPosX.x, m_clampedStartingPosX.y);
-        bag.transform.position = new Vector3(x, y, objectPos.z);
+        Vector2 clamp = ClampIdleBagMovement();
+       bag.transform.position = new Vector3(clamp.x, clamp.y, objectPos.z);
+    }
+    Vector2 ClampIdleBagMovement()
+    {
+        Vector2 x_minMAx = new Vector2(bagThrowBoundaries.bounds.extents.x, bagThrowBoundaries.bounds.extents.y); //returns the height and width to center.
+        Vector2 boxPos = bagThrowBoundaries.transform.position;
+        Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x); 
+        Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);
+        Vector3 pos = new Vector3();
+
+        pos = new Vector3(Mathf.Clamp(pos.x, xLimit.x, xLimit.y), //Clamps X pos
+        Mathf.Clamp(pos.y, yLimit.x, yLimit.y), 0);
+
+        return pos;
     }
     void BagFlyingState()
     {
@@ -182,8 +186,12 @@ public class scr_bagMovement : MonoBehaviour
         direction = objectPos - bagTempPos;
         direction.Normalize();
         DecideThrowStrenght(objectPos, bagTempPos);
+
+
+
         if (remainingBounces <= 0)
         {
+            SP.ExplodeBag();
             ISG.PlayBagBreak();
             CS.MoveTowardsWinBag();
             bagTempPos = Vector3.zero;
