@@ -30,6 +30,11 @@ public class scr_GameManager : MonoBehaviour
     private bool OpenSurveyOnce;
     private Vector3 m_oldCameraPos;
 
+    public float buttonMorphSpeed;
+    public Vector2 minMaxButtonScale;
+    private bool scaleUpwards;
+
+
     // Use this for initialization
     void Awake()
     {
@@ -127,6 +132,10 @@ public class scr_GameManager : MonoBehaviour
 
     void EndGameStateMenu()
     {
+        if (GetMorphableButton() != null)
+        {
+            ScaleButton(GetMorphableButton());
+        }
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -163,6 +172,42 @@ public class scr_GameManager : MonoBehaviour
             ISM.PlayButtonDeclick();
         }
     }
+
+    void ScaleButton(Transform obj)
+    {
+
+
+            if (!scaleUpwards)
+        {
+            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(0.7f, minMaxButtonScale.x, obj.localScale.z), buttonMorphSpeed);
+            if (obj.localScale.y <= minMaxButtonScale.x)
+            {
+                scaleUpwards = true;
+            }
+        }
+        else if (scaleUpwards)
+        {
+            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
+            if (obj.localScale.y >= minMaxButtonScale.y)
+            {
+                scaleUpwards = false;
+            }
+        }
+    }
+
+    Transform GetMorphableButton()
+    {
+        Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics2D.Raycast(toMouse.origin, toMouse.direction, LayerMask.NameToLayer("button")).transform)
+        {
+            Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
+            Debug.Log(obj.name);
+            return obj;
+        }
+        return null;
+
+    }
+
     // Update is called once per frame
     void Update()
     {
