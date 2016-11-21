@@ -15,13 +15,8 @@ public class scr_bagMovement : MonoBehaviour
     private scr_CameraScript CS;
     private scr_IngameSoundManager ISG;
     private scr_GameManager GM;
-
-
     private ParticleSystem PS;
  
-
-
-
     public int bounces;
     private int remainingBounces;
     public float bouncePower;
@@ -138,7 +133,6 @@ public class scr_bagMovement : MonoBehaviour
     public void DestroyBag()
     {
         ISG.PlayBagBreak();
-
         bag.SetActive(false);
     }
     public void ThrowBag()
@@ -149,7 +143,6 @@ public class scr_bagMovement : MonoBehaviour
             mousePos = new Vector3(mousePos.x, mousePos.y, 1);
             Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 direction;
-
             PS.enableEmission = true;
 
             direction = objectPos - bagTempPos;
