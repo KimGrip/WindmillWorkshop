@@ -32,12 +32,13 @@ public class scr_GameManager : MonoBehaviour
     public float buttonMorphSpeed;
     public Vector2 minMaxButtonScale;
     private bool scaleUpwards;
-    // Use this for initialization
+
+    private List<Transform> l_buttons = new List<Transform>();
+    private List<Vector3> l_buttonScale = new List<Vector3>();
+    private Transform activeButton;
     void Awake()
     {
-        //m_EndGameMenu = GameObject.Find("EndGameMenu");
-        //m_EndGameMenu.SetActive(false);
-        
+        activeButton = null;
         OpenSurveyOnce = true;
         m_BT = BagType.def;
         Time.timeScale = 1;
@@ -133,6 +134,11 @@ public class scr_GameManager : MonoBehaviour
         {
             ScaleButton(GetMorphableButton());
         }
+        else
+        {
+            ResetButtonScale(transform);
+        }
+
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -170,7 +176,6 @@ public class scr_GameManager : MonoBehaviour
             ISM.PlayButtonDeclick();
         }
     }
-
     void ScaleButton(Transform obj)
     {
         if (!scaleUpwards)
@@ -190,20 +195,45 @@ public class scr_GameManager : MonoBehaviour
             }
         }
     }
-
+    void ResetButtonScale(Transform obj)
+    {
+        for(int i = 0; i < l_buttons.Count;i++)
+        {
+            if(l_buttons[i].gameObject != obj.gameObject)
+            {
+                l_buttons[i].localScale = l_buttonScale[i];
+            }
+        }
+    }
     Transform GetMorphableButton()
     {
         Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layer_mask = LayerMask.GetMask("button");
+        bool isThere = false;
         if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f,layer_mask))
         {
+            // Layer 11 is correct
             Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
-            return obj;
+            if(LayerMask.NameToLayer("button") == obj.gameObject.layer)
+            {
+                activeButton = obj;
+                for (int i = 0; i < l_buttons.Count;i++ )
+                {
+                    if(l_buttons[i].gameObject == obj.gameObject)
+                    {
+                        isThere = true;
+                    }
+                }
+                if(!isThere)
+                {
+                    l_buttons.Add(obj);
+                    l_buttonScale.Add(obj.transform.localScale);
+                }
+                return obj;
+            }
         }
         return null;
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))

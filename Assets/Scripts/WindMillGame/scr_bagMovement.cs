@@ -42,7 +42,14 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
-        bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
+        if (GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>() != null)
+        {
+            bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
+        }
+        else
+        {
+            Debug.LogError("BagBoundaries need BoxCollider2D");
+        }
         aimingArrow = GameObject.FindGameObjectWithTag("aimarrow");
         aimingArrow.SetActive(false);
         BS = BagState.idle;
@@ -52,7 +59,6 @@ public class scr_bagMovement : MonoBehaviour
         SP = gameObject.GetComponent<spawnParticles>();
         PS.enableEmission = false;
         
-
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
         remainingBounces = bounces;
@@ -62,7 +68,6 @@ public class scr_bagMovement : MonoBehaviour
     {
         m_inputDelay = value;
     }
-    // Update is called once per frame
     void Update()
     {
         if(m_morphBag)
