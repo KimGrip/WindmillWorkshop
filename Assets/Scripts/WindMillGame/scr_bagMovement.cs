@@ -59,6 +59,8 @@ public class scr_bagMovement : MonoBehaviour
         SP = gameObject.GetComponent<spawnParticles>();
         PS.enableEmission = false;
         
+
+
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
         remainingBounces = bounces;

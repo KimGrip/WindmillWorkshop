@@ -38,6 +38,7 @@ public class scr_GameManager : MonoBehaviour
     private Transform activeButton;
     void Awake()
     {
+        scaleUpwards = true;
         activeButton = null;
         OpenSurveyOnce = true;
         m_BT = BagType.def;
@@ -45,7 +46,8 @@ public class scr_GameManager : MonoBehaviour
         m_Camera = Camera.main.GetComponent<scr_CameraScript>();
         m_EGS = EndGameState.none;
         ISM = GetComponent<scr_IngameSoundManager>();
-    
+
+
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))
         {
             Instantiate(bag, m_bagSpawnPos.position, Quaternion.identity);
@@ -178,30 +180,19 @@ public class scr_GameManager : MonoBehaviour
     }
     void ScaleButton(Transform obj)
     {
-        if (!scaleUpwards)
-        {
-            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, obj.localScale.z), buttonMorphSpeed);
-            if (obj.localScale.y <= minMaxButtonScale.x)
-            {
-                scaleUpwards = true;
-            }
-        }
-        else if (scaleUpwards)
+        if (scaleUpwards)
         {
             obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
-            if (obj.localScale.y >= minMaxButtonScale.y)
-            {
-                scaleUpwards = false;
-            }
         }
     }
     void ResetButtonScale(Transform obj)
     {
+        scaleUpwards = true;
         for(int i = 0; i < l_buttons.Count;i++)
         {
             if(l_buttons[i].gameObject != obj.gameObject)
             {
-                l_buttons[i].localScale = l_buttonScale[i];
+                l_buttons[i].localScale = Vector3.MoveTowards(l_buttons[i].localScale, l_buttonScale[i], buttonMorphSpeed);
             }
         }
     }
