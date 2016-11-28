@@ -33,34 +33,37 @@ public class scr_AlchemyShop : MonoBehaviour
     private int[] equipedPotions = new int[3];
     public Vector2 InventorySize;
     public Vector2 InvetoryItemSpace;
-
     [Space(20)]
     private GameObject[] equipmentSlots = new GameObject[3];
     private scr_EquipmentSlot[] ES = new scr_EquipmentSlot[3];
-
+    private GameObject[] potionInfoButton = new GameObject[2];
     private int m_gold;
     private Transform selectedTransform;
     private int selectedTransformIndex;
     private int equipedItemIndex;
     private bool potionSelected;
+    private bool ableToMove;
+
 	void Start () 
     {
         m_gold = 500;
         potionSelected = false;
         selectedTransform = null;
+        ableToMove = true;
         Inventory_BG = transform.FindChild("Inventory_BG");
         potion_info_BG = transform.FindChild("potion_info_BG");
+        potionInfoButton[0] = potion_info_BG.FindChild("potion_accept").gameObject;
+        potionInfoButton[1] = potion_info_BG.FindChild("potion_decline").gameObject;
+
         potion_info_Picture = GameObject.Find("potionPicture").GetComponent<SpriteRenderer>();
         potion_info_BG.gameObject.SetActive(false);
         canvas = transform.FindChild("Canvas");
-
         m_texts = new Text[canvas.childCount];
         for (int i = 0; i < m_texts.Length; i++ )
         {
             m_texts[i] = canvas.GetChild(i).GetComponent<Text>();
             m_texts[i].enabled = false;
         }
-
 
         Equipment_BG = transform.FindChild("Equipment_BG");
         potion_0_0 = GameObject.Find("potion_0_0").transform;
@@ -73,7 +76,6 @@ public class scr_AlchemyShop : MonoBehaviour
         {
             for (int y = 0; y < InventorySize.y; y++)
             {   
-
                 //All of these variables need to be read in through text file,perhaps new one just for potions.
                 InvetoryPotion IP = new InvetoryPotion();
                 IP.m_unlocked = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
@@ -101,78 +103,84 @@ public class scr_AlchemyShop : MonoBehaviour
             }
         }
 	}
+
+
     public void AddItemToEquipment(GameObject obj)
     {
-        if (equipedItemIndex > l_Inventory.Count)
+        if (equipedItemIndex == equipedPotions.Length)
         {
             equipedItemIndex = 0;
+            Debug.Log("resetingIndex");
         }
-        for (int i = 0; i < l_Inventory.Count; i++)
+        for (int i = 0; i < l_Inventory.Count; i++) // goes through all the inventory
         {
-            if (obj == l_Inventory[i].m_obj)
+            if (obj == l_Inventory[i].m_obj)  // if the object exsists within the invenotry
             {
                 equipedPotions[equipedItemIndex] = l_Inventory[i].m_potionType;
                 equipedItemIndex += 1;
+                Debug.Log(equipedItemIndex);
             }
         }
         selectedTransform = null;
+        selectedTransformIndex = 0;
         potionSelected = false;
     }
 	void Update () 
     {
-
+    
         if (selectedTransform != null)
         {
             potionSelected = true;
         }
         if(potionSelected)
         {
-            if(l_Inventory[selectedTransformIndex].m_bought)
+            if(l_Inventory[selectedTransformIndex].m_bought && ableToMove)
             {
                 MovePotion(l_Inventory[selectedTransformIndex].m_obj.transform);
-                DisplayPotionInfo(potionSelected, selectedTransformIndex);
+                DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
             else
             {
-                DisplayPotionInfo(potionSelected, selectedTransformIndex);
+                DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
         }
         else
         {
             selectedTransform = SelectPotion();
-            DisplayPotionInfo(potionSelected, selectedTransformIndex);
-            ResetPotionPos();
+            DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
         }
+
 	}
-    void ResetPotionPos()
+    
+    public void ResetPotionPos(GameObject obj)
     {
         for(int i =0; i < ES.Length; i++)
         {
-            if(l_Inventory[selectedTransformIndex].m_obj == ES[i].GetAttachedPotion())
+            if(ES[i].GetAttachedPotion() == obj && selectedTransform != null)
             {
-                Debug.Log("asd");
+                selectedTransform.position = l_Inventory[selectedTransformIndex].m_originalPos;
+                ableToMove = false;
+                selectedTransform = null;
+                potionSelected = false;
+                Debug.Log("reset");
             }
-
         }
     }
-    
+
     void MovePotion(Transform obj)
     {
         if (Input.GetMouseButton(0))
         {
-            for(int i = 0;i < l_Inventory.Count; i++)
-            {
-                Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-                Vector3 mousePos = Input.mousePosition;
-                mousePos = new Vector3(mousePos.x, mousePos.y, 6);
-                Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
-                float y = objectPos.y;
-                float x = objectPos.x;
-                obj.position = new Vector3(x, y, 0);
-            }
+            Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 mousePos = Input.mousePosition;
+            mousePos = new Vector3(mousePos.x, mousePos.y, 6);
+            Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
+            float y = objectPos.y;
+            float x = objectPos.x;
+            obj.position = new Vector3(x, y, 0);
         }
     }
-    void DisplayPotionInfo(bool active , int index)
+    void DisplayPotionInfo(bool active , int index, bool isBought)
     {
         potion_info_BG.gameObject.SetActive(active);
         potion_info_Picture.sprite = l_potionTypes[l_Inventory[index].m_potionType].GetComponent<SpriteRenderer>().sprite;
@@ -180,6 +188,10 @@ public class scr_AlchemyShop : MonoBehaviour
         for (int i = 0; i < m_texts.Length; i++)
         {
             m_texts[i].enabled = active;
+        }
+        for (int i = 0; i < potionInfoButton.Length; i++ )
+        {
+            potionInfoButton[i].SetActive(!isBought);
         }
         m_texts[0].text = "Cost: " + l_Inventory[index].m_goldCost.ToString();
         m_texts[1].text = l_Inventory[index].m_description;
@@ -197,7 +209,6 @@ public class scr_AlchemyShop : MonoBehaviour
                     {
                         if (l_Inventory[i].m_obj.transform == selectedTransform && l_Inventory[i].m_unlocked)
                         {
-                            Debug.Log("accept buy");
                             if (m_gold >= l_Inventory[i].m_goldCost && !l_Inventory[i].m_bought)
                             {
                                 m_gold = m_gold - l_Inventory[i].m_goldCost;
@@ -228,14 +239,12 @@ public class scr_AlchemyShop : MonoBehaviour
             }
         }
     }
-    //Alla potions ska åka tillbaka till sen OG position.
     Transform SelectPotion()
     {
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
             int layer_mask = LayerMask.GetMask("potion");
-
             if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
             {
                 Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
@@ -244,6 +253,7 @@ public class scr_AlchemyShop : MonoBehaviour
                     if (l_Inventory[i].m_obj == obj.gameObject && l_Inventory[i].m_unlocked)
                     {
                         selectedTransformIndex = i;
+                        ableToMove = true;
                         return obj;
                     }
                 }

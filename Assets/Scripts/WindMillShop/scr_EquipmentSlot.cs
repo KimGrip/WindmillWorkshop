@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class scr_EquipmentSlot : MonoBehaviour 
 {
     private bool isEmpty;
     private GameObject attachedObject;
     private scr_AlchemyShop AS;
+    
 	void Start () 
     {
         AS = GetComponentInParent<scr_AlchemyShop>();
@@ -31,10 +33,22 @@ public class scr_EquipmentSlot : MonoBehaviour
     {
         if(colli.gameObject.tag == "potion" && isEmpty)
         {
-            Debug.Log("addingPotion");
             attachedObject = colli.gameObject;
             AS.AddItemToEquipment(attachedObject);
         }
+    }
+    void OnTriggerExit2D(Collider2D colli)
+    {
+        if (colli.gameObject.tag == "potion" && !isEmpty)
+        {
+            AS.ResetPotionPos(attachedObject);
+            attachedObject = null;
+            isEmpty = true;
+        }
+    }
+    public void SetAttachedPotion(GameObject obj)
+    {
+        attachedObject = obj;
     }
     public GameObject GetAttachedPotion()
     {
