@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 public class scr_IngameUI : MonoBehaviour 
 {
-    private Text score;
+    public Text score;
     private Text scoreUntillNextMedal;
     private Text scoreMax;
     private Text remainingBags;
@@ -56,6 +56,11 @@ public class scr_IngameUI : MonoBehaviour
         }
         float answer =  m_multiplier - WBH.GetScore();
         return (int)answer;
+    }
+    public int GetScoreText()
+
+    {
+        return WBH.GetScore();
     }
     //Show Medal instead of text for next medal;
 	void Update () 
