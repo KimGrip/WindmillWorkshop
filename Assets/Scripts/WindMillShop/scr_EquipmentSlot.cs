@@ -35,6 +35,7 @@ public class scr_EquipmentSlot : MonoBehaviour
         {
             attachedObject = colli.gameObject;
             AS.AddItemToEquipment(attachedObject);
+            Debug.Log("adding");
         }
     }
     void OnTriggerExit2D(Collider2D colli)

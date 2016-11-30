@@ -26,6 +26,7 @@ public class scr_AlchemyShop : MonoBehaviour
     private Transform potion_0_0;
     private Transform canvas;
     private Text[] m_texts;
+    private scr_FileHandler FS;
     public List<String> potionDescritions;
     [Space(20)]
     public List<GameObject> l_potionTypes;
@@ -54,7 +55,7 @@ public class scr_AlchemyShop : MonoBehaviour
         potion_info_BG = transform.FindChild("potion_info_BG");
         potionInfoButton[0] = potion_info_BG.FindChild("potion_accept").gameObject;
         potionInfoButton[1] = potion_info_BG.FindChild("potion_decline").gameObject;
-
+        FS = GetComponent<scr_FileHandler>();
         potion_info_Picture = GameObject.Find("potionPicture").GetComponent<SpriteRenderer>();
         potion_info_BG.gameObject.SetActive(false);
         canvas = transform.FindChild("Canvas");
@@ -127,7 +128,6 @@ public class scr_AlchemyShop : MonoBehaviour
     }
 	void Update () 
     {
-    
         if (selectedTransform != null)
         {
             potionSelected = true;
@@ -149,7 +149,6 @@ public class scr_AlchemyShop : MonoBehaviour
             selectedTransform = SelectPotion();
             DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
         }
-
 	}
     
     public void ResetPotionPos(GameObject obj)
@@ -265,5 +264,4 @@ public class scr_AlchemyShop : MonoBehaviour
     {
         return l_Inventory.ToArray();
     }
-
 }

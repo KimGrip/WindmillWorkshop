@@ -15,6 +15,8 @@ public class scr_cannonBehaviour : MonoBehaviour
     public float cannonPower;
     public float cannonShootCooldown;
     private float m_cannonCooldownCounter;
+    private bool shootBag;
+    
 	// Use this for initialization
 	void Start () 
     {
@@ -28,15 +30,15 @@ public class scr_cannonBehaviour : MonoBehaviour
         m_cannonCooldownCounter += Time.deltaTime;
         if (m_cannonCooldownCounter > cannonShootCooldown)
         {
-            if (collectedParticles >= neededShootAmount)
+            if (collectedParticles >= neededShootAmount || shootBag)
             {
                 FireCannon();
                 ISM.PlayCannonSounds(0, false);
             }
             m_cannonCooldownCounter = 0;
         }
-
 	}
+    
     Vector2 ParticleSpawnVel(Vector2 targetPos, Vector2 selfPos)
     {
         Vector2 direction;
@@ -78,18 +80,30 @@ public class scr_cannonBehaviour : MonoBehaviour
                obj.transform.position = ParticleSpawnPosition(cannonAim.position, transform.position);
                obj.GetComponent<Rigidbody2D>().velocity = ParticleSpawnVel(cannonAim.position, transform.position);
            }
+           if(collectedGameObjects[i].tag == "bag")
+           {
+               collectedGameObjects[i].transform.position = ParticleSpawnPosition(cannonAim.position, transform.position);
+               collectedGameObjects[i].GetComponent<Rigidbody2D>().velocity = ParticleSpawnVel(cannonAim.position, transform.position);
+           }
        }
        collectedGameObjects.Clear();
        collectedParticles = 0;
     }
+
     void OnCollisionEnter2D(Collision2D colli)
     {
-        if (colli.gameObject.tag == "particle")
+        if (colli.gameObject.tag == "particle" )
         {
             collectedGameObjects.Add(colli.gameObject);
             colli.gameObject.SetActive(false);
             collectedParticles += 1;
             ISM.PlayCannonSounds(1, true);
+        }
+        else if( colli.gameObject.tag == "bag")
+        {
+            collectedGameObjects.Add(colli.gameObject);
+            ISM.PlayCannonSounds(1, true);
+            shootBag = true;
         }
     }
 }
