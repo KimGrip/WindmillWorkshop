@@ -24,13 +24,16 @@ public class scr_aimingArrow : MonoBehaviour {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 5.23f;
 
-        Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
-        mousePos.x = mousePos.x - objectPos.x;
-        mousePos.y = mousePos.y - objectPos.y;
+		Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
+		mousePos.x = mousePos.x - bag.transform.position.x;
+		mousePos.y = mousePos.y - bag.transform.position.y;
 
 
         float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		Vector3 BagTransform = new Vector3 (bag.transform.position.x, bag.transform.position.y);
+		Vector3 ArrowTransform = new Vector3 (transform.position.x, transform.position.y);
+		Quaternion lookAt = Quaternion.LookRotation(BagTransform - ArrowTransform);
+		transform.rotation = Quaternion.RotateTowards (transform.rotation, lookAt, 0f);
 
     }
     void AimingArrowSize()
