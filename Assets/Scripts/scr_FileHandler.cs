@@ -54,8 +54,6 @@ public class scr_FileHandler : MonoBehaviour
     {
         lineChanger("lvl: " + amount, fileDirectory, 7);
     }
-
-
     static void lineChanger(string newText, string fileName, int line_to_edit)
     {
         string[] arrLine = File.ReadAllLines(fileName);
