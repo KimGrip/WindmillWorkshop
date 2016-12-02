@@ -73,17 +73,14 @@ public class scr_overWorld : MonoBehaviour
                     {
                         SceneManager.LoadScene(0);
                         ISM.PlayButtonClick();
-
                     }
                     else if (obj.name == "NextLevel")
                     {
                         SceneManager.LoadScene(Application.loadedLevel + 1);
                         ISM.PlayButtonClick();
-
                     }
                     else if (obj.name == "GoToSurvey" && openSurveyonce)
                     {
-
                         Application.OpenURL("https://docs.google.com/forms/d/1Z00IarFUP5H8czNhRzySRa-H9fMCDFif3JoYpJAHVdY/edit?usp=sharing");
                         openSurveyonce = false;
                     }
@@ -210,11 +207,10 @@ public class scr_overWorld : MonoBehaviour
         
         EndGameStateMenu();
 
-         SelectWorld();
+        SelectWorld();
         if(m_selectedWorld)
         {
             DisplayWorldDetails(m_selectedWorld);
-
         }
 	}
     void DisplayWorldDetails(GameObject world)
@@ -286,8 +282,7 @@ public class scr_overWorld : MonoBehaviour
                        {
                            SceneManager.LoadScene(i);
                        }
-                   }
-             
+                   }            
                }
            }
        }

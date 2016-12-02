@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class scr_EquipmentSlot : MonoBehaviour 
 {
     private bool isEmpty;
     private GameObject attachedObject;
     private scr_AlchemyShop AS;
+    
 	void Start () 
     {
         AS = GetComponentInParent<scr_AlchemyShop>();
@@ -16,7 +18,6 @@ public class scr_EquipmentSlot : MonoBehaviour
 	    if(attachedObject != null)
         {
             isEmpty = false;
-            attachedObject.transform.position = transform.position;
         }
 	}
     public bool GetEquipmentSlotStatus()
@@ -29,12 +30,38 @@ public class scr_EquipmentSlot : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D colli)
     {
-        if(colli.gameObject.tag == "potion" && isEmpty)
+
+        if(colli.gameObject.tag == "potion" && !isEmpty)
         {
-            Debug.Log("addingPotion");
+            AS.ResetPotionPos(attachedObject);
+            Debug.Log("replace");
+
+
             attachedObject = colli.gameObject;
+            attachedObject.transform.position = transform.position;
             AS.AddItemToEquipment(attachedObject);
         }
+        else if(colli.gameObject.tag == "potion" && isEmpty)
+        {
+            attachedObject = colli.gameObject;
+            attachedObject.transform.position = transform.position;
+            AS.AddItemToEquipment(attachedObject);
+            Debug.Log("adding");
+        }
+    }
+    void OnTriggerExit2D(Collider2D colli)
+    {
+        if (colli.gameObject.tag == "potion" && !isEmpty)
+        {
+            AS.ResetPotionPos(attachedObject);
+            attachedObject = null;
+            isEmpty = true;
+            Debug.Log("exit");
+        }
+    }
+    public void SetAttachedPotion(GameObject obj)
+    {
+        attachedObject = obj;
     }
     public GameObject GetAttachedPotion()
     {

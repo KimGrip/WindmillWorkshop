@@ -165,6 +165,7 @@ public class scr_bagMovement : MonoBehaviour
         float y = objectPos.y;
         float x = objectPos.x;
         transform.position = new Vector3(x, y, 0);
+
         ClampBagPos();
     }
     void ClampBagPos()
@@ -175,6 +176,8 @@ public class scr_bagMovement : MonoBehaviour
         Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x); 
         Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);     
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, xLimit.x, xLimit.y), Mathf.Clamp(transform.position.y, yLimit.x, yLimit.y), transform.position.z);
+        Debug.Log("clamp");
+
     }
     void BagFlyingState()
     {

@@ -8,37 +8,31 @@ using System.Linq;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-public class scr_MainMenu : MonoBehaviour 
-{
-    //Playgame = 2 boxs, new game, contine
-    //Shop = shopstate
-    //options = new state eller något. SoundFX, volumeControll, Windowd mode,fullscreen, resolution
-    //Escape = Quitgame box.
-    private string fileDirectory;
 
+public class scr_FileHandler : MonoBehaviour 
+{
+    private string fileDirectory;
     private int LatestLevelIndex;
     private int goldAmount;
     private Vector2 resolution;
     private float SoundFXVolume;
     private float MusicVolume;
     private int WindowMode;
+    private int[] equipedPotions = new int[3];
     private List<int> l_UpgradeStatus = new List<int>();
-	void Start () 
+
+    void Start()
     {
         fileDirectory = Application.dataPath + "/Settings.txt";
         if (!File.Exists(fileDirectory)) // If the file is there
         {
             CreateSettingsFile();
         }
-        else if(File.Exists(fileDirectory))
+        else if (File.Exists(fileDirectory))
         {
             LoadSettingsFromFile();
         }
-	}
-	void Update () 
-    {
-        SelectItem();
-	}
+    }
     public void WriteToFile(int p_lineIdex, string data)
     {
         //1.upgrades int[]
@@ -48,39 +42,73 @@ public class scr_MainMenu : MonoBehaviour
         //5.Resolution Vector2
         //6.WindowedMode int
         //7.last level Index int
+        //8.Potions equiped
         TextWriter tw2 = new StreamWriter(fileDirectory);
         tw2.WriteLine(data, p_lineIdex);
-
     }
+    public void WriteGoldAmount(string amount)
+    {
+        lineChanger("Gold: "+amount, fileDirectory, 2);
+    }
+    public void WriteLastLevel(string amount)
+    {
+        lineChanger("lvl: " + amount, fileDirectory, 7);
+    }
+    static void lineChanger(string newText, string fileName, int line_to_edit)
+    {
+        string[] arrLine = File.ReadAllLines(fileName);
+        arrLine[line_to_edit - 1] = newText;
+        File.WriteAllLines(fileName, arrLine);
+    }
+
     public void LoadSettingsFromFile()
     {
         Debug.Log("loading");
         StreamReader reader = new StreamReader(Application.dataPath + "/Settings.txt");
-      
+
         MusicVolume = 0;
         goldAmount = 0;
         SoundFXVolume = 0;
         resolution = new Vector2(1920, 1080);
-        WindowMode = 1;
         LatestLevelIndex = 0;
-
         //1.upgrades int[]
         LoadUpgrades(reader, reader.ReadLine());
         //2.gold int
-        LoadGold(reader, reader.ReadLine());
+        goldAmount = LoadGold(reader, reader.ReadLine());
         //3.soundFX float
-        LoadSoundFX(reader, reader.ReadLine());
+        SoundFXVolume = LoadSoundFX(reader, reader.ReadLine());
         //4.MusicVolume float 
-        LoadMusicVolume(reader, reader.ReadLine());
+        MusicVolume = LoadMusicVolume(reader, reader.ReadLine());
         //5.Resolution Vector2
-        LoadResolution(reader,reader.ReadLine());
+        LoadResolution(reader, reader.ReadLine());
         //6.WindowedMode int
-        LoadWindowMode(reader, reader.ReadLine());
+        WindowMode = LoadWindowMode(reader, reader.ReadLine());
         //7.last level Index int
-        LoadLastLevelIndex(reader,reader.ReadLine());
+        LatestLevelIndex = LoadLastLevelIndex(reader, reader.ReadLine());
+       
         reader.Close();
     }
-    void LoadWindowMode(StreamReader reader, string window)
+    public List<int> GetUpgradeStatus()
+    {
+        return l_UpgradeStatus;
+    }
+    public int GetGold()
+    {
+        return goldAmount;
+    }
+    public float GetSoundFXVolume()
+    {
+        return SoundFXVolume;
+    }
+    public float GetMusicVolume()
+    {
+        return MusicVolume;
+    }
+    public int GetLastLevelIndex()
+    {
+        return LatestLevelIndex;
+    }
+    int LoadWindowMode(StreamReader reader, string window)
     {
         string windowResult = System.Text.RegularExpressions.Regex.Replace(window, @"\D", "");
         int[] windowNumbers = new int[windowResult.Length];
@@ -96,14 +124,15 @@ public class scr_MainMenu : MonoBehaviour
             finalBool = windowNumbers[i] * Convert.ToInt32(Math.Pow(10, windowNumbers.Length - i - 1));
         }
         WindowMode = finalBool;
+        return WindowMode;
     }
     void LoadResolution(StreamReader reader, string resolution)
     {
         string ResResult = System.Text.RegularExpressions.Regex.Replace(resolution, @"\D", "");
         int[] resNumbers = new int[ResResult.Length];
-       
+        
     }
-    void LoadLastLevelIndex(StreamReader reader, string level)
+    int LoadLastLevelIndex(StreamReader reader, string level)
     {
         string levelResult = System.Text.RegularExpressions.Regex.Replace(level, @"\D", "");
         int[] levelNumbers = new int[level.Length];
@@ -119,9 +148,9 @@ public class scr_MainMenu : MonoBehaviour
             finalLevel = levelNumbers[i] * Convert.ToInt32(Math.Pow(10, levelResult.Length - i - 1));
         }
         LatestLevelIndex = finalLevel;
-
+        return LatestLevelIndex;
     }
-    void LoadMusicVolume(StreamReader reader, string MusicFX)
+    float LoadMusicVolume(StreamReader reader, string MusicFX)
     {
         string MusicFXResult = System.Text.RegularExpressions.Regex.Replace(MusicFX, @"\D", "");
         float[] MusicNumbers = new float[MusicFXResult.Length];
@@ -135,8 +164,9 @@ public class scr_MainMenu : MonoBehaviour
         {
             MusicVolume += MusicNumbers[i] * Convert.ToInt32(Math.Pow(10, MusicNumbers.Length - i - 1));
         }
+        return MusicVolume;
     }
-    void LoadSoundFX(StreamReader reader, string SoundFX)
+    float LoadSoundFX(StreamReader reader, string SoundFX)
     {
         string SoundFXResult = System.Text.RegularExpressions.Regex.Replace(SoundFX, @"\D", "");
         float[] FXnumbers = new float[SoundFXResult.Length];
@@ -150,8 +180,9 @@ public class scr_MainMenu : MonoBehaviour
         {
             SoundFXVolume += FXnumbers[i] * Convert.ToInt32(Math.Pow(10, FXnumbers.Length - i - 1));
         }
+        return SoundFXVolume;
     }
-    void LoadGold(StreamReader reader, string gold)
+    int LoadGold(StreamReader reader, string gold)
     {
         string result = System.Text.RegularExpressions.Regex.Replace(gold, @"\D", "");
         int finalAmount = 0;
@@ -165,6 +196,7 @@ public class scr_MainMenu : MonoBehaviour
         {
             goldAmount += numbers[i] * Convert.ToInt32(Math.Pow(10, numbers.Length - i - 1));
         }
+        return goldAmount;
     }
     void LoadUpgrades(StreamReader reader, string upgrades)
     {
@@ -182,68 +214,46 @@ public class scr_MainMenu : MonoBehaviour
     void CreateSettingsFile()
     {
         TextWriter tw = new StreamWriter(fileDirectory);
-
         resolution = new Vector2(1920, 1080);
         WindowMode = 1;
         SoundFXVolume = 0.5f;
         MusicVolume = 0.5f;
-        LatestLevelIndex = 0;   
+        LatestLevelIndex = 0;
 
-        for (int i = 0; i < 11;i++ )
+        for (int i = 0; i < 11; i++)
         {
             l_UpgradeStatus.Add(0);
         }
 
-        for(int i = 0; i < l_UpgradeStatus.Count; i++)
+        for (int i = 0; i < l_UpgradeStatus.Count; i++)
         {
-            if(i != 0)
+            if (i != 0)
             {
-                tw.Write("," +  l_UpgradeStatus[i].ToString());
+                tw.Write("," + l_UpgradeStatus[i].ToString());
             }
             else
             {
-                tw.Write("Upgrades: "+ l_UpgradeStatus[i].ToString());
+                tw.Write("Upgrades: " + l_UpgradeStatus[i].ToString());
             }
         }
         tw.WriteLine("\r\nGold: " + goldAmount.ToString());
         tw.WriteLine("SoundFX: " + SoundFXVolume.ToString());
         tw.WriteLine("Music: " + MusicVolume.ToString());
         tw.WriteLine("Resolution: " + resolution.ToString());
-        tw.WriteLine("WindowMode: " + WindowMode.ToString()); 
+        tw.WriteLine("WindowMode: " + WindowMode.ToString());
         tw.Write("lvl: " + LatestLevelIndex.ToString());
-        tw.Close();
-    }
-    public void LoadLatestLevel()
-    {
-        SceneManager.LoadScene(LatestLevelIndex);
-    }
-    void SelectItem()
-    {
-        if (Input.GetMouseButton(0))
+
+        for (int i = 0; i < equipedPotions.Length; i++ )
         {
-            Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics2D.Raycast(toMouse.origin, toMouse.direction, LayerMask.NameToLayer("button")).transform != null)
+            if (i != 0)
             {
-                Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
-                Debug.Log(obj.name);
-
-                if (obj.name == "Main_Menu_PLAY")
-                {
-                    LoadLatestLevel();
-                }
-                else if(obj.name == "Main_Menu_SHOP")
-                {
-                    SceneManager.LoadScene("windmill_001");
-                }
-                else if (obj.name == "Main_Menu_OPTIONS")
-                {
-
-                }
-                else if(obj.name == "Main_Menu_OVERWORLD")
-                {
-                    SceneManager.LoadScene("OverWorldScreen");
-                }
+                tw.Write("," + equipedPotions[i].ToString());
+            }
+            else
+            {
+                tw.Write("\r\npotions: " + equipedPotions[i].ToString());
             }
         }
+        tw.Close();
     }
 }
