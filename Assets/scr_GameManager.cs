@@ -37,6 +37,7 @@ public class scr_GameManager : MonoBehaviour
     private List<Transform> l_buttons = new List<Transform>();
     private List<Vector3> l_buttonScale = new List<Vector3>();
     private Transform activeButton;
+    private int m_gold;
     void Awake()
     {
         scaleUpwards = true;
@@ -57,6 +58,10 @@ public class scr_GameManager : MonoBehaviour
         }
         m_showEndGameMenu = false;
         m_DisplayOnce = true;
+    }
+    public int GetGold()
+    {
+        return m_gold;
     }
     void Start()
     {
