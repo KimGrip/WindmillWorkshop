@@ -8,23 +8,55 @@ public class scr_IngameUI : MonoBehaviour
     private Text scoreUntillNextMedal;
     private Text scoreMax;
     private Text remainingBags;
+    private Text gold;
+
     private scr_winbagBehaviour WBH;
     private scr_GameManager GM;
     private scr_bagMovement BM;
+    private scr_FileHandler FH;
     private Image UIBar;
     private RectTransform UIBarRect;
     private float m_multiplier;
-	void Start () 
+    //private scr_FileHandler FH;
+    private int[] activePotions = new int[3];
+   
+    private GameObject[] bagsLeft = new GameObject[3];
+
+    void Awake()
     {
         WBH = GameObject.FindGameObjectWithTag("win").GetComponent<scr_winbagBehaviour>();
+
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
+        FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
+    }
+	void Start () 
+    {
+        //FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
         BM = GameObject.FindGameObjectWithTag("bag").GetComponent<scr_bagMovement>();
+       
         score = transform.Find("score").GetComponent<Text>();
         scoreUntillNextMedal = transform.Find("scoreUntillNextMedal").GetComponent<Text>();
         scoreMax = transform.Find("scoreMax").GetComponent<Text>();
-        
         remainingBags = transform.Find("bagsleft").GetComponent<Text>();;
-	}
+        gold = transform.Find("gold").GetComponent<Text>();
+        //bagsLeft[0] = GameObject.Find("Bag_Wheat1");
+        //bagsLeft[1] = GameObject.Find("Bag_Wheat2");
+        //bagsLeft[2] = GameObject.Find("Bag_Wheat3");
+
+        //Searching the scene for GameObject 
+        for (int i = 0; i < bagsLeft.Length; i++)
+        {
+            bagsLeft[i] = GameObject.Find("bagWheat" + i.ToString());
+
+
+           // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
+             
+        }
+        for (int i = 0; i < activePotions.Length; i++)
+        {
+            activePotions[i] = FH.GetEquipedPotions(i);
+        }
+    }
 
 
     //    Bronze: 25 gold, 4k flour score.
@@ -58,7 +90,6 @@ public class scr_IngameUI : MonoBehaviour
         return (int)answer;
     }
     public int GetScoreText()
-
     {
         return WBH.GetScore();
     }
@@ -66,7 +97,6 @@ public class scr_IngameUI : MonoBehaviour
 	void Update () 
     {
         UpdateTexts();
-        
 	}
     void UpdateTexts()
     {
@@ -75,5 +105,22 @@ public class scr_IngameUI : MonoBehaviour
         scoreUntillNextMedal.text = "Next Medal: " + CalculateRemainingParticlesForNextMedal().ToString();
         int bags = GM.GetRemainingBags() + 1;
         remainingBags.text = "Bags Left: " + bags.ToString();
+        gold.text = GM.GetGold().ToString();
+        int test = 0;
+        test = bagsLeft.Length - bags;
+
+        if (test != 0)
+        {
+            bagsLeft[test - 1].SetActive(false);
+        }
+
+        if (GM.GetRemainingBags() == 0 && GameObject.FindGameObjectWithTag("bag") == null) 
+        {
+            for (int i = 0; i < bagsLeft.Length; i++)
+            {
+                bagsLeft[i].SetActive(false);
+            }
+        }
+
     }
 }

@@ -54,16 +54,23 @@ public class scr_FileHandler : MonoBehaviour
     {
         lineChanger("lvl: " + amount, fileDirectory, 7);
     }
+    public void WriteEquipedPotions(int[] potions)
+    {
+        string line = "";
+        for (int i = 0; i < potions.Length; i++ )
+        {
+            line += potions[i] + ",";
+        }
+        lineChanger("potions: " + line, fileDirectory, 8);
+    }
     static void lineChanger(string newText, string fileName, int line_to_edit)
     {
         string[] arrLine = File.ReadAllLines(fileName);
         arrLine[line_to_edit - 1] = newText;
         File.WriteAllLines(fileName, arrLine);
     }
-
     public void LoadSettingsFromFile()
     {
-        Debug.Log("loading");
         StreamReader reader = new StreamReader(Application.dataPath + "/Settings.txt");
 
         MusicVolume = 0;
@@ -85,7 +92,9 @@ public class scr_FileHandler : MonoBehaviour
         WindowMode = LoadWindowMode(reader, reader.ReadLine());
         //7.last level Index int
         LatestLevelIndex = LoadLastLevelIndex(reader, reader.ReadLine());
-       
+        //8. EqiupedItems
+        equipedPotions = LoadEquipedPotions(reader, reader.ReadLine());
+
         reader.Close();
     }
     public List<int> GetUpgradeStatus()
@@ -107,6 +116,10 @@ public class scr_FileHandler : MonoBehaviour
     public int GetLastLevelIndex()
     {
         return LatestLevelIndex;
+    }
+    public int GetEquipedPotions(int index)
+    {
+        return equipedPotions[index];
     }
     int LoadWindowMode(StreamReader reader, string window)
     {
@@ -210,6 +223,15 @@ public class scr_FileHandler : MonoBehaviour
             l_UpgradeStatus[y] = (int)Char.GetNumericValue(result.ElementAt(y));
         }
 
+    }
+    int[] LoadEquipedPotions(StreamReader reader, string potions)
+    {
+        string result = System.Text.RegularExpressions.Regex.Replace(potions, @"\D", "");
+        for (int i = 0; i < result.Length; i++)
+        {
+            equipedPotions[i] = (int)Char.GetNumericValue(result.ElementAt(i));
+        }
+        return equipedPotions;
     }
     void CreateSettingsFile()
     {

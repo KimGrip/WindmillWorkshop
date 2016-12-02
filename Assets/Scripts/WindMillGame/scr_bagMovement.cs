@@ -34,9 +34,13 @@ public class scr_bagMovement : MonoBehaviour
     private float startScale;
     public float maxScaleOffset;
     private bool scaleUpwards;
+    private bool extraThrow;
+    private bool throwExtraOnce;
     public float scaleSpeed;
-    void Start()
+    void Awake()
     {
+        extraThrow = false;
+        throwExtraOnce = true;
         startScale = transform.localScale.x;
         hasTakenPosInput = false;
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
@@ -58,13 +62,28 @@ public class scr_bagMovement : MonoBehaviour
         bagRB.isKinematic = true;
         SP = gameObject.GetComponent<spawnParticles>();
         PS.enableEmission = false;
-        
-
 
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
         remainingBounces = bounces;
         ISG = GameObject.Find("GameManager").GetComponent<scr_IngameSoundManager>();
+    }
+    public bool GetExtraThrow()
+    {
+        return throwExtraOnce;
+    }
+    public void SetExtraThrow(bool state)
+    {
+        extraThrow = state;
+    }
+
+    public void SetBagBounciness(float value)
+    {
+        bagMaterial.bounciness = value;
+    }
+    public void SetScale(Vector3 value)
+    {
+        transform.localScale = value;
     }
     public void SetInputDelay(float value)
     {
@@ -179,6 +198,10 @@ public class scr_bagMovement : MonoBehaviour
         Debug.Log("clamp");
 
     }
+    public Rigidbody2D GetRB()
+    {
+        return GetComponent<Rigidbody2D>();
+    }
     void BagFlyingState()
     {
         bagRB.isKinematic = false;
@@ -197,6 +220,17 @@ public class scr_bagMovement : MonoBehaviour
             ISG.PlayBagBreak();
             CS.MoveTowardsWinBag();
             bagTempPos = Vector3.zero;
+        }
+        if(extraThrow && throwExtraOnce && isThrown && Input.GetMouseButtonDown(0))
+        {
+
+            direction = objectPos - transform.position;
+            direction.Normalize();
+            bagRB.velocity = direction * throwStrenght;
+            throwExtraOnce = false;
+            Debug.Log(throwStrenght);
+   
+            ISG.PlayBagShootSound();
         }
     }
     void InputManager()

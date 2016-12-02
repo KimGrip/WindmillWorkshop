@@ -14,6 +14,7 @@ public class scr_GameManager : MonoBehaviour
 {
     private BagType m_BT;
     private EndGameState m_EGS;
+    private scr_PotionEffects PE;
     public Transform m_bagSpawnPos;
     public int m_bagAmount;
     public GameObject bag;
@@ -36,6 +37,7 @@ public class scr_GameManager : MonoBehaviour
     private List<Transform> l_buttons = new List<Transform>();
     private List<Vector3> l_buttonScale = new List<Vector3>();
     private Transform activeButton;
+    private int m_gold;
     void Awake()
     {
         scaleUpwards = true;
@@ -46,7 +48,7 @@ public class scr_GameManager : MonoBehaviour
         m_Camera = Camera.main.GetComponent<scr_CameraScript>();
         m_EGS = EndGameState.none;
         ISM = GetComponent<scr_IngameSoundManager>();
-
+        PE = GetComponent<scr_PotionEffects>();
 
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))
         {
@@ -56,6 +58,10 @@ public class scr_GameManager : MonoBehaviour
         }
         m_showEndGameMenu = false;
         m_DisplayOnce = true;
+    }
+    public int GetGold()
+    {
+        return m_gold;
     }
     void Start()
     {
@@ -258,10 +264,16 @@ public class scr_GameManager : MonoBehaviour
     }
     void SpawnNewBag(BagType type)
     {
-        Instantiate(bag, m_bagSpawnPos.position, new Quaternion(0, 0, 0, 0));
+        GameObject obj = (GameObject)Instantiate(bag, m_bagSpawnPos.position, new Quaternion(0, 0, 0, 0));
         m_Camera.SetCameraXYPos(m_bagSpawnPos.gameObject);
         m_Camera.SetFollowBag(false);
         bag.SetActive(true);
         m_bagAmount -= 1;
+
+
+        PE.SetBag(obj);
+        PE.SetBMPointer(obj.GetComponent<scr_bagMovement>());
+        PE.SetSPPointer(obj.GetComponent<spawnParticles>());
+
     }
 }
