@@ -270,6 +270,7 @@ public class scr_GameManager : MonoBehaviour
         bag.SetActive(true);
         m_bagAmount -= 1;
 
+
         PE.SetBag(obj);
         PE.SetBMPointer(obj.GetComponent<scr_bagMovement>());
         PE.SetSPPointer(obj.GetComponent<spawnParticles>());

@@ -71,7 +71,6 @@ public class scr_FileHandler : MonoBehaviour
     }
     public void LoadSettingsFromFile()
     {
-        Debug.Log("loading");
         StreamReader reader = new StreamReader(Application.dataPath + "/Settings.txt");
 
         MusicVolume = 0;

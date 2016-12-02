@@ -72,7 +72,7 @@ public class scr_bagMovement : MonoBehaviour
     }
     public bool GetExtraThrow()
     {
-        return extraThrow;
+        return throwExtraOnce;
     }
     public void SetExtraThrow(bool state)
     {

@@ -22,13 +22,18 @@ public class scr_IngameUI : MonoBehaviour
    
     private GameObject[] bagsLeft = new GameObject[3];
 
+    void Awake()
+    {
+        WBH = GameObject.FindGameObjectWithTag("win").GetComponent<scr_winbagBehaviour>();
+
+        GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
+        FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
+    }
 	void Start () 
     {
         //FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
-        WBH = GameObject.FindGameObjectWithTag("win").GetComponent<scr_winbagBehaviour>();
-        GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
-        FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
         BM = GameObject.FindGameObjectWithTag("bag").GetComponent<scr_bagMovement>();
+       
         score = transform.Find("score").GetComponent<Text>();
         scoreUntillNextMedal = transform.Find("scoreUntillNextMedal").GetComponent<Text>();
         scoreMax = transform.Find("scoreMax").GetComponent<Text>();
@@ -42,9 +47,9 @@ public class scr_IngameUI : MonoBehaviour
         for (int i = 0; i < bagsLeft.Length; i++)
         {
             bagsLeft[i] = GameObject.Find("bagWheat" + i.ToString());
-            Debug.Log("bagsleft: " + bagsLeft[i].name);
 
-            Debug.Log("How many bags are left: " + GM.GetRemainingBags());
+
+           // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
              
         }
         for (int i = 0; i < activePotions.Length; i++)
@@ -103,7 +108,6 @@ public class scr_IngameUI : MonoBehaviour
         gold.text = GM.GetGold().ToString();
         int test = 0;
         test = bagsLeft.Length - bags;
-        Debug.Log("How many bags: " + bagsLeft.Length + " " + bags + " " + test);
 
         if (test != 0)
         {
