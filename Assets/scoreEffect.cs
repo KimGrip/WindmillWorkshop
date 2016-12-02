@@ -12,7 +12,9 @@ public class scoreEffect : MonoBehaviour {
     private scr_IngameUI inGameUI;
     private int oldScore;
     private float timeToStop;
-    
+    private Transform glassJarPosition;
+    private Transform scorePosition;
+
     // Use this for initialization
     void Start ()
     {
@@ -25,67 +27,31 @@ public class scoreEffect : MonoBehaviour {
 
         inGameUI = GameObject.Find("Canvas").GetComponent<scr_IngameUI>();
         oldScore = inGameUI.GetScoreText();
-        Debug.Log(oldScore);
-        Debug.Log(inGameUI.GetScoreText());
 
-        scaleUpwards = true;
-        transform.localScale = new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, minMaxButtonScale.x);
-    }
+        glassJarPosition = GameObject.Find("Glass_jar").GetComponent<Transform>();
+        scorePosition = transform;
 
-    void ScaleMedal(Transform obj)
-    {
-        if (scaleUpwards)
-        {
-            obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
-            if (obj.localScale.y >= minMaxButtonScale.y)
-            {
-                scaleUpwards = false;
+        scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
+        //   Debug.Log(oldScore);
+        //   Debug.Log(inGameUI.GetScoreText());
 
-            }
-            if (obj.localScale.y >= minMaxButtonScale.y - startBeforeDoneTime)
-            {
-
-               
-                
-                //PS.enableEmission = true;
-                
-                //PS.Play();
-                
-            }
-
-        else if(!scaleUpwards)
-            {
-                obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
-                if (obj.localScale.y >= minMaxButtonScale.y)
-                {
-                    scaleUpwards = true;
-
-                }
-            }
-        }
+        //    scaleUpwards = true;
+        //    transform.localScale = new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, minMaxButtonScale.x);
     }
 
     void RunParticles()
     {
         if (PS.isPlaying)
         {
-            //if (timeToStop > 200)
-            //{
-            //    PS.Stop();
-            //    timeToStop = 0;
-            //    Debug.Log("Particle system is off");
-            //}
-            //else
-            //{
-            //    timeToStop = timeToStop + 1;
-            //}
+            transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, transform.localScale.z), buttonMorphSpeed);
         }
         else
         {
             PS.Play();
             timeToStop = 0;
             //PS.enableEmission = true;
-            Debug.Log("Particlesystem on");
+            // Debug.Log("Particlesystem on");
+            // ScaleMedal(transform);
         }
     }
 
@@ -94,17 +60,12 @@ public class scoreEffect : MonoBehaviour {
         if (oldScore != inGameUI.GetScoreText())
         {
             RunParticles();
-            ScaleMedal(transform);
-            Debug.Log(oldScore);
-            Debug.Log("this is ingame score:" + inGameUI.GetScoreText());
+        //    Debug.Log(oldScore);
+        //    Debug.Log("this is ingame score:" + inGameUI.GetScoreText());
             timeToStop = 0;
             //timeToStop = 0;
         }
-        //else if (timeToStop < 22)
-        //{
-        //    timeToStop = timeToStop + 1;
-        //    RunParticles();
-        //}
+
     }
 
     // Update is called once per frame
@@ -113,18 +74,26 @@ public class scoreEffect : MonoBehaviour {
         CheckScore();
         oldScore = inGameUI.GetScoreText();
         //ScaleMedal(transform);
-        Debug.Log("checkScore run");
+      //  Debug.Log("checkScore run");
 
-        if (timeToStop >    0.5f)
+        if (!PS.isPlaying)
         {
-            
+            transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, transform.localScale.z), buttonMorphSpeed);
+        }
+
+        if (timeToStop > 0.3f)
+        {
             PS.Stop();
             timeToStop = 0;
-            Debug.Log("Particle system is off");
+            //    Debug.Log("Particle system is off");
         }
         else
         {
             timeToStop = timeToStop + Time.deltaTime;
         }
+        Debug.Log(scorePosition);
+        Debug.Log(glassJarPosition);
+        scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
+//        glassJarPosition.position = new Vector3(Camera.main.transform.position.x + 10f, Camera.main.transform.position.y, transform.position.z);
     }
 }
