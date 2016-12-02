@@ -125,10 +125,20 @@ public class scr_AlchemyShop : MonoBehaviour
 
 	void Update () 
     {
+        if(Input.GetKey(KeyCode.A))
+        {
+            FS.WriteEquipedPotions(equipedPotions);
+        }
+        else if(Input.GetKey(KeyCode.D))
+        {
+            for (int i = 0; i < 3; i++ )
+            {
+                Debug.Log(FS.GetEquipedPotions(i));
+            }
+        }
         if (selectedTransform != null)
         {
             potionSelected = true;
-            Debug.Log(selectedTransform);
         }
 
         if(potionSelected)    //selected transfom != null
@@ -144,7 +154,7 @@ public class scr_AlchemyShop : MonoBehaviour
             }
             if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("wat");
+                Debug.Log("deselecting Potino");
                 ResetPotionPos(selectedTransform.gameObject);
                 ableToMove = false;
                 selectedTransform = null;
@@ -153,6 +163,7 @@ public class scr_AlchemyShop : MonoBehaviour
         }
         else  //Nothing is selected
         {
+            Debug.Log("Nothing is selected");
             if (Input.GetMouseButton(0) == false)
             {  
                selectedTransform = SelectPotion();
@@ -172,12 +183,11 @@ public class scr_AlchemyShop : MonoBehaviour
                 //ableToMove = false;
                 //selectedTransform = null;
                 //potionSelected = false;
-
-                Debug.Log("ResetPotionPos");
             }
         }
+        Debug.Log("ResetPotionPos");
         obj.transform.position = l_Inventory[selectedTransformIndex].m_originalPos;
-       
+   
     }
 
     void MovePotion(Transform obj)
@@ -279,15 +289,12 @@ public class scr_AlchemyShop : MonoBehaviour
                 }
                 if(obj == null)
                 {
-
                     Debug.Log("null");
                     potionSelected = false;
                     selectedTransform = null;
                     selectedTransformIndex = 0;
                 }
             }
-
-          
         }
     }
     Transform SelectPotion()

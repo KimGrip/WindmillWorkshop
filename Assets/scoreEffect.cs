@@ -55,7 +55,7 @@ public class scoreEffect : MonoBehaviour {
 
         else if(!scaleUpwards)
             {
-                obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
+                 obj.localScale = Vector3.MoveTowards(obj.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, obj.localScale.z), buttonMorphSpeed);
                 if (obj.localScale.y >= minMaxButtonScale.y)
                 {
                     scaleUpwards = true;
@@ -100,6 +100,11 @@ public class scoreEffect : MonoBehaviour {
             timeToStop = 0;
             //timeToStop = 0;
         }
+        else if (oldScore == inGameUI.GetScoreText())
+        {
+            Debug.Log("asdasd");
+
+        }
         //else if (timeToStop < 22)
         //{
         //    timeToStop = timeToStop + 1;
@@ -115,16 +120,18 @@ public class scoreEffect : MonoBehaviour {
         //ScaleMedal(transform);
         Debug.Log("checkScore run");
 
-        if (timeToStop >    0.5f)
+        if (timeToStop > 0.5f)
         {
-            
             PS.Stop();
             timeToStop = 0;
             Debug.Log("Particle system is off");
+           
         }
         else
         {
             timeToStop = timeToStop + Time.deltaTime;
+       
+            transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, transform.localScale.z), buttonMorphSpeed);
         }
     }
 }

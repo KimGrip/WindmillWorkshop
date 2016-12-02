@@ -53,7 +53,7 @@ public class scr_EquipmentSlot : MonoBehaviour
     {
         if (colli.gameObject.tag == "potion" && !isEmpty)
         {
-            AS.ResetPotionPos(attachedObject);
+         //   AS.ResetPotionPos(attachedObject);
             attachedObject = null;
             isEmpty = true;
             Debug.Log("exit");

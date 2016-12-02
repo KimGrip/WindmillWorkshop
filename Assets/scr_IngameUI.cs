@@ -58,7 +58,6 @@ public class scr_IngameUI : MonoBehaviour
         return (int)answer;
     }
     public int GetScoreText()
-
     {
         return WBH.GetScore();
     }
@@ -66,7 +65,6 @@ public class scr_IngameUI : MonoBehaviour
 	void Update () 
     {
         UpdateTexts();
-        
 	}
     void UpdateTexts()
     {
