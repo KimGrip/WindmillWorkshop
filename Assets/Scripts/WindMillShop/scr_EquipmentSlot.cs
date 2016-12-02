@@ -18,7 +18,6 @@ public class scr_EquipmentSlot : MonoBehaviour
 	    if(attachedObject != null)
         {
             isEmpty = false;
-            attachedObject.transform.position = transform.position;
         }
 	}
     public bool GetEquipmentSlotStatus()
@@ -31,9 +30,21 @@ public class scr_EquipmentSlot : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D colli)
     {
-        if(colli.gameObject.tag == "potion" && isEmpty)
+
+        if(colli.gameObject.tag == "potion" && !isEmpty)
+        {
+            AS.ResetPotionPos(attachedObject);
+            Debug.Log("replace");
+
+
+            attachedObject = colli.gameObject;
+            attachedObject.transform.position = transform.position;
+            AS.AddItemToEquipment(attachedObject);
+        }
+        else if(colli.gameObject.tag == "potion" && isEmpty)
         {
             attachedObject = colli.gameObject;
+            attachedObject.transform.position = transform.position;
             AS.AddItemToEquipment(attachedObject);
             Debug.Log("adding");
         }
@@ -45,6 +56,7 @@ public class scr_EquipmentSlot : MonoBehaviour
             AS.ResetPotionPos(attachedObject);
             attachedObject = null;
             isEmpty = true;
+            Debug.Log("exit");
         }
     }
     public void SetAttachedPotion(GameObject obj)
