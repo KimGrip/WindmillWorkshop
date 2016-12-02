@@ -37,7 +37,7 @@ public class scr_bagMovement : MonoBehaviour
     private bool extraThrow;
     private bool throwExtraOnce;
     public float scaleSpeed;
-    void Start()
+    void Awake()
     {
         extraThrow = false;
         throwExtraOnce = true;
@@ -62,8 +62,6 @@ public class scr_bagMovement : MonoBehaviour
         bagRB.isKinematic = true;
         SP = gameObject.GetComponent<spawnParticles>();
         PS.enableEmission = false;
-        
-
 
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
@@ -78,6 +76,7 @@ public class scr_bagMovement : MonoBehaviour
     {
         extraThrow = state;
     }
+
     public void SetBagBounciness(float value)
     {
         bagMaterial.bounciness = value;
