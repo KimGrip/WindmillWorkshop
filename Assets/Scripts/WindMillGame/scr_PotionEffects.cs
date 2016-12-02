@@ -86,7 +86,6 @@ public class scr_PotionEffects : MonoBehaviour
 	}
     public void SetBag(GameObject p_bag)
     {
-        Debug.Log("WASTGsdlvlksjxbvlkz");
         bag = p_bag;
     }
 	public void SetSPPointer(spawnParticles sp)
