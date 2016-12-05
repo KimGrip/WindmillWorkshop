@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class scr_IngameUI : MonoBehaviour 
+public class scr_IngameUI : MonoBehaviour
 {
     public Text score;
     private Text scoreUntillNextMedal;
@@ -34,21 +34,21 @@ public class scr_IngameUI : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
     }
-	void Start () 
+    void Start()
     {
         //FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
         BM = GameObject.FindGameObjectWithTag("bag").GetComponent<scr_bagMovement>();
-       
+
         score = transform.Find("score").GetComponent<Text>();
         scoreUntillNextMedal = transform.Find("scoreUntillNextMedal").GetComponent<Text>();
         scoreMax = transform.Find("scoreMax").GetComponent<Text>();
-        remainingBags = transform.Find("bagsleft").GetComponent<Text>();;
+        remainingBags = transform.Find("bagsleft").GetComponent<Text>(); ;
         gold = transform.Find("gold").GetComponent<Text>();
         //bagsLeft[0] = GameObject.Find("Bag_Wheat1");
         //bagsLeft[1] = GameObject.Find("Bag_Wheat2");
         //bagsLeft[2] = GameObject.Find("Bag_Wheat3");
 
-        //Searching the scene for GameObject 
+        //Searching the scene for GameObject
         potionSelect = GameObject.Find("active0");
 
         for (int i = 0; i < bagsLeft.Length; i++)
@@ -56,8 +56,8 @@ public class scr_IngameUI : MonoBehaviour
             bagsLeft[i] = GameObject.Find("bagWheat" + i.ToString());
 
 
-           // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
-        //Finds active potions     
+            // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
+            //Finds active potions    
         }
         for (int i = 0; i < activePotions.Length; i++)
         {
@@ -68,11 +68,13 @@ public class scr_IngameUI : MonoBehaviour
         //SpriteRenderer sr = new SpriteRenderer();
         //sr = potionsLeft[i].GetComponent<SpriteRenderer>();
         //sr.sprite = potionsSprites[0];
-        
+
         for (int i = 0; i < potionsLeft.Length; i++)
         {
             potionsLeft[i] = GameObject.Find("Potion" + i.ToString());
             potionsLeft[i].GetComponent<SpriteRenderer>().sprite = potionsSprites[activePotions[i]];
+            Debug.Log(potionSelect.transform.position);
+            Debug.Log(potionsLeft[i].transform.position);
         }
 
         //for (int i = 0; i < potionsLeft.Length; i++)
@@ -101,7 +103,7 @@ public class scr_IngameUI : MonoBehaviour
         }
         else if (WBH.GetScore() < GM.GetMedalValue(1) * WBH.GetMaxScore())   // Silver
         {
-            m_multiplier = WBH.GetMaxScore() * GM.GetMedalValue(1);   
+            m_multiplier = WBH.GetMaxScore() * GM.GetMedalValue(1);
         }
         else if (WBH.GetScore() < GM.GetMedalValue(2) * WBH.GetMaxScore())   // gold
         {
@@ -111,7 +113,7 @@ public class scr_IngameUI : MonoBehaviour
         {
             m_multiplier = WBH.GetMaxScore() * GM.GetMedalValue(3);
         }
-        float answer =  m_multiplier - WBH.GetScore();
+        float answer = m_multiplier - WBH.GetScore();
         return (int)answer;
     }
     public int GetScoreText()
@@ -119,7 +121,7 @@ public class scr_IngameUI : MonoBehaviour
         return WBH.GetScore();
     }
     //Show Medal instead of text for next medal;
-	void Update () 
+    void Update()
     {
         UpdateTexts();
         if (Input.GetKey(KeyCode.S))
@@ -133,7 +135,7 @@ public class scr_IngameUI : MonoBehaviour
     void UpdateTexts()
     {
         score.text = "Points: " + WBH.GetScore().ToString();
-        scoreMax.text = "Max Level Score: " + WBH.GetMaxScore().ToString() ;
+        scoreMax.text = "Max Level Score: " + WBH.GetMaxScore().ToString();
         scoreUntillNextMedal.text = "Next Medal: " + CalculateRemainingParticlesForNextMedal().ToString();
         int bags = GM.GetRemainingBags() + 1;
         remainingBags.text = "Bags Left: ";
@@ -146,7 +148,7 @@ public class scr_IngameUI : MonoBehaviour
             bagsLeft[test - 1].SetActive(false);
         }
 
-        if (GM.GetRemainingBags() == 0 && GameObject.FindGameObjectWithTag("bag") == null) 
+        if (GM.GetRemainingBags() == 0 && GameObject.FindGameObjectWithTag("bag") == null)
         {
             for (int i = 0; i < bagsLeft.Length; i++)
             {
@@ -154,7 +156,7 @@ public class scr_IngameUI : MonoBehaviour
             }
         }
 
-        
+
 
     }
 }
