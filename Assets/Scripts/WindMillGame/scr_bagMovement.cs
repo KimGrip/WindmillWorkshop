@@ -228,7 +228,6 @@ public class scr_bagMovement : MonoBehaviour
             direction.Normalize();
             bagRB.velocity = direction * throwStrenght;
             throwExtraOnce = false;
-            Debug.Log(throwStrenght);
    
             ISG.PlayBagShootSound();
         }
@@ -267,7 +266,9 @@ public class scr_bagMovement : MonoBehaviour
                 CS.SetCameraOrtographicSize(8.0f);
                 CS.SetCameraRestriction(false, true);
                 hasTakenPosInput = false;
+
             }
+
         }
     }
     public bool GetThrowBagStatus()

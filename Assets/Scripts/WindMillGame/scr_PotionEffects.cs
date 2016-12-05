@@ -107,34 +107,34 @@ public class scr_PotionEffects : MonoBehaviour
     {
         switch (GetPotionType())
         {
-            // p_bouncePower, p_scaleMultiplier, p_goldMultiplier, p_extraThrow,  p_gravity, p_scoreEndMultiplier, p_drag,  p_timeScale)
+            //  bouncePower, scaleMultiplier, goldMultiplier, extraThrow,  gravity, scoreEndMultiplier, drag,  timeScale)
 
             case PotionType.SuperBounce:
-                SetVariables(1.25f, m_ScaleMultiplier, m_goldMultiplier, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.25f, bag.transform.localScale.x, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.none:
-                SetVariables(m_bouncePower, m_ScaleMultiplier, m_goldMultiplier, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.0f, bag.transform.localScale.x, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.Gigantic:
-                SetVariables(m_bouncePower, 1.0f, m_goldMultiplier, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.0f, 1.5f, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.Success:
-                SetVariables(m_bouncePower, m_ScaleMultiplier, 1.50f, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.0f, bag.transform.localScale.x, 1.5f, false, 1, 1, 0, 1);
                 break;
             case PotionType.Minature:
-                SetVariables(m_bouncePower, 0.3f, m_goldMultiplier, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, 1);
                 break;
             case PotionType.Slow_Motion:
-                SetVariables(m_bouncePower, m_ScaleMultiplier, m_goldMultiplier, m_extraThrow, m_gravity, m_scoreEndMultiplier, m_drag, 0.5f);
+                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, false, 1, 1, 0, 0.5f);
                 break;
             case PotionType.Score:
-                SetVariables(m_bouncePower, m_ScaleMultiplier, m_goldMultiplier, m_extraThrow, m_gravity, 1.05f, m_drag, m_timeScale);
+                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, false, 1, 1.05f, 0, 1);
                 break;
             case PotionType.Presence:
-                SetVariables(m_bouncePower, m_ScaleMultiplier, m_goldMultiplier, true, m_gravity, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, true, 1, 1.0f, 0, 1);
                 break;
             case PotionType.Iron:
-                SetVariables(0.1f, m_ScaleMultiplier, m_goldMultiplier, false, 2.0f, m_scoreEndMultiplier, m_drag, m_timeScale);
+                SetVariables(0.1f, bag.transform.localScale.x, 1.0f, false, 2.0f, 1.0f, 0, 1);
                 break;
         }
 	}

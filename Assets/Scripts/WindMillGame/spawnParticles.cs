@@ -45,7 +45,7 @@ public class spawnParticles : MonoBehaviour
             SpawnParticlesFromBag();
         }
 
-        if (Input.GetMouseButton(0) && BM.GetThrowBagStatus() && !BM.GetExtraThrow())
+        if (Input.GetMouseButton(0) && BM.GetThrowBagStatus() )
         {
             m_exploding = true;
         }
