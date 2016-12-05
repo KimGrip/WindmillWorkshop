@@ -21,7 +21,7 @@ public class scr_FileHandler : MonoBehaviour
     private int[] equipedPotions = new int[3];
     private List<int> l_UpgradeStatus = new List<int>();
 
-    void Awake()
+    void Start()
     {
         fileDirectory = Application.dataPath + "/Settings.txt";
         if (!File.Exists(fileDirectory)) // If the file is there
