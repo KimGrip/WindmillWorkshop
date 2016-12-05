@@ -110,31 +110,31 @@ public class scr_PotionEffects : MonoBehaviour
             //  bouncePower, scaleMultiplier, goldMultiplier, extraThrow,  gravity, scoreEndMultiplier, drag,  timeScale)
 
             case PotionType.SuperBounce:
-                SetVariables(1.25f, bag.transform.localScale.x, 1, false, 1, 1, 0, 1);
+                SetVariables(1.25f, 0.5f, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.none:
-                SetVariables(1.0f, bag.transform.localScale.x, 1, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.Gigantic:
                 SetVariables(1.0f, 1.5f, 1, false, 1, 1, 0, 1);
                 break;
             case PotionType.Success:
-                SetVariables(1.0f, bag.transform.localScale.x, 1.5f, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, 1);
                 break;
             case PotionType.Minature:
                 SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, 1);
                 break;
             case PotionType.Slow_Motion:
-                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, false, 1, 1, 0, 0.5f);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, 0.5f);
                 break;
             case PotionType.Score:
-                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, false, 1, 1.05f, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, 1);
                 break;
             case PotionType.Presence:
-                SetVariables(1.0f, bag.transform.localScale.x, 1.0f, true, 1, 1.0f, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.0f, true, 1, 1.0f, 0, 1);
                 break;
             case PotionType.Iron:
-                SetVariables(0.1f, bag.transform.localScale.x, 1.0f, false, 2.0f, 1.0f, 0, 1);
+                SetVariables(0.1f, 0.5f, 1.0f, false, 2.0f, 1.0f, 0, 1);
                 break;
         }
 	}
@@ -159,8 +159,6 @@ public class scr_PotionEffects : MonoBehaviour
         BM.SetExtraThrow(m_extraThrow);
         BM.GetRB().drag = m_drag;
         BM.GetRB().gravityScale = m_gravity;
-
-
         Time.timeScale = m_timeScale;
     }
 }
