@@ -73,8 +73,6 @@ public class scr_IngameUI : MonoBehaviour
         {
             potionsLeft[i] = GameObject.Find("Potion" + i.ToString());
             potionsLeft[i].GetComponent<SpriteRenderer>().sprite = potionsSprites[activePotions[i]];
-            Debug.Log(potionSelect.transform.position);
-            Debug.Log(potionsLeft[i].transform.position);
         }
 
         //for (int i = 0; i < potionsLeft.Length; i++)
