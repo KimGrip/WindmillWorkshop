@@ -19,12 +19,18 @@ public class scr_IngameUI : MonoBehaviour
     private float m_multiplier;
     //private scr_FileHandler FH;
     private int[] activePotions = new int[3];
-    
+    private GameObject[] potionsLeft = new GameObject[3];
     private GameObject[] bagsLeft = new GameObject[3];
+    private GameObject potionSelect;
+
+    public List<Sprite> potionsSprites;
+
+    private int selectedPotionIndex;
 
     void Awake()
     {
         WBH = GameObject.FindGameObjectWithTag("win").GetComponent<scr_winbagBehaviour>();
+
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
     }
@@ -43,16 +49,42 @@ public class scr_IngameUI : MonoBehaviour
         //bagsLeft[2] = GameObject.Find("Bag_Wheat3");
 
         //Searching the scene for GameObject 
+        potionSelect = GameObject.Find("active0");
+
         for (int i = 0; i < bagsLeft.Length; i++)
         {
             bagsLeft[i] = GameObject.Find("bagWheat" + i.ToString());
+
+
+           // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
+        //Finds active potions     
         }
         for (int i = 0; i < activePotions.Length; i++)
         {
             activePotions[i] = FH.GetEquipedPotions(i);
             Debug.Log(FH.GetEquipedPotions(i));
         }
+
+        //SpriteRenderer sr = new SpriteRenderer();
+        //sr = potionsLeft[i].GetComponent<SpriteRenderer>();
+        //sr.sprite = potionsSprites[0];
+        
+        for (int i = 0; i < potionsLeft.Length; i++)
+        {
+            potionsLeft[i] = GameObject.Find("Potion" + i.ToString());
+            potionsLeft[i].GetComponent<SpriteRenderer>().sprite = potionsSprites[activePotions[i]];
+            Debug.Log(potionSelect.transform.position);
+            Debug.Log(potionsLeft[i].transform.position);
+        }
+
+        //for (int i = 0; i < potionsLeft.Length; i++)
+        //{
+        //    potionSelect[i] = GameObject.Find("active" + i.ToString());
+        //    //potionSelect[i].gameObject.SetActive
+        //    //potionsLeft[i].GetComponent<SpriteRenderer>().sprite
+        //}
     }
+
 
     //    Bronze: 25 gold, 4k flour score.
     //    Silver: 50 gold, 5500 flour score.
@@ -92,18 +124,21 @@ public class scr_IngameUI : MonoBehaviour
 	void Update () 
     {
         UpdateTexts();
-        
-        if(Input.GetKey(KeyCode.S))
-        Debug.Log(FH.GetEquipedPotions(2));
+        if (Input.GetKey(KeyCode.S))
+            Debug.Log(FH.GetEquipedPotions(2));
 
-	}
+        selectedPotionIndex = GM.GetRemainingBags();
+        potionSelect.transform.position = potionsLeft[selectedPotionIndex].transform.position;
+
+
+    }
     void UpdateTexts()
     {
         score.text = "Points: " + WBH.GetScore().ToString();
         scoreMax.text = "Max Level Score: " + WBH.GetMaxScore().ToString() ;
         scoreUntillNextMedal.text = "Next Medal: " + CalculateRemainingParticlesForNextMedal().ToString();
         int bags = GM.GetRemainingBags() + 1;
-        remainingBags.text = "Bags Left: " + bags.ToString();
+        remainingBags.text = "Bags Left: ";
         gold.text = GM.GetGold().ToString();
         int test = 0;
         test = bagsLeft.Length - bags;
@@ -120,6 +155,8 @@ public class scr_IngameUI : MonoBehaviour
                 bagsLeft[i].SetActive(false);
             }
         }
+
+        
 
     }
 }
