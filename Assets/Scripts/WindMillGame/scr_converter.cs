@@ -16,10 +16,15 @@ public class scr_converter : MonoBehaviour
 
     public float convertionTimePerParticle;
     private float m_convertionTimer;
+    private ParticleSystem PS;
+    private float stopPSTimer = 1.0f;
+
 	// Use this for initialization
 	void Start () 
     {
         objPooler = GameObject.FindGameObjectWithTag("pooler");
+        PS = GetComponent<ParticleSystem>();
+        PS.Stop();
 	}
 	
 	// Update is called once per frame
@@ -33,13 +38,26 @@ public class scr_converter : MonoBehaviour
                 if(spawnMultiplier >= 1.0f / convertionRate)
                 {
                     spawnMultiplier = 1.0f / convertionRate;
+                    PS.Play();
                 }
                 SpawnConvertedItems();
             }
             m_convertionTimer = 0;
         }
         m_convertionTimer = m_convertionTimer + Time.deltaTime;
+
+        if (PS.isPlaying)
+        {
+            if (stopPSTimer >= 0.5f)
+            {
+                PS.Stop();
+                stopPSTimer = 0f;
+            }
+            stopPSTimer = stopPSTimer + Time.deltaTime;
+        }
+        
 	}
+
     Vector3 RandomCircle(Vector3 center, float radius)
     {
         float ang = Random.value * 360;
@@ -76,12 +94,14 @@ public class scr_converter : MonoBehaviour
         {
             colli.gameObject.SetActive(false);
             storedObjects++;
+
         }
         if (colli.gameObject.tag == "particle" && colli.gameObject.name != "p2")
         {
             colli.gameObject.SetActive(false);
+
         }
-        if(colli.gameObject.tag == "particle" && colli.gameObject.name == "p2")
+        if (colli.gameObject.tag == "particle" && colli.gameObject.name == "p2")
         {
             colli.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 0.8f * transform.lossyScale.y, colli.gameObject.transform.position.z);
         }
