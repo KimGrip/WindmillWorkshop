@@ -91,7 +91,7 @@ public class scr_AlchemyShop : MonoBehaviour
                 IP.m_originalPos = obj.transform.position;
                 l_Inventory.Add(IP);
                 SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
-    
+                
                 if(!IP.m_bought)
                 {
                     sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);

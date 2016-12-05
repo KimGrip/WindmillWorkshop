@@ -15,6 +15,7 @@ public class scr_winbagBehaviour : MonoBehaviour
     private scr_bagMovement BM;
     private scr_IngameSoundManager ISM;
     private scr_obp pooler;
+    private scr_FileHandler FH;
     private int collectedParticles;
     private int remaimingParticles;
     private int maxParticles;
@@ -36,6 +37,7 @@ public class scr_winbagBehaviour : MonoBehaviour
         BM = GameObject.FindGameObjectWithTag("bag").GetComponent<scr_bagMovement>();
         ISM = GM.GetComponent<scr_IngameSoundManager>();
         pooler = GameObject.FindGameObjectWithTag("pooler").GetComponent<scr_obp>();
+        FH = GM.GetComponent<scr_FileHandler>();
         
         collectedParticles = 0;
         m_particle_1_score = GM.GetParticleScore(0);
@@ -61,6 +63,12 @@ public class scr_winbagBehaviour : MonoBehaviour
     }
     void SaveLevelInfo(int worldIndex , float p_levelScore, float p_levelMaxScore)
     {
+
+        FH.WriteGoldAmount(GM.GetGold().ToString());
+        Debug.Log("asd");
+
+
+
         bool p_completed;
         if(m_score > GM.GetMedalValue(0) * maxScore)
             p_completed = true;
@@ -75,11 +83,9 @@ public class scr_winbagBehaviour : MonoBehaviour
             int index = Application.loadedLevel;
             for (int u = 0; u < 10; u++)
             {
-                Debug.Log("2");
                 System.IO.File.WriteAllText(fileDirectory, "0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n ");
             }
             var lines = File.ReadAllLines(fileDirectory);
-
             lines[index] = Convert.ToInt32(p_completed).ToString() + ':' + p_levelScore.ToString() + ':' + p_levelMaxScore.ToString();
             File.WriteAllLines(fileDirectory, lines);
         }
@@ -87,7 +93,6 @@ public class scr_winbagBehaviour : MonoBehaviour
         {
             int index = Application.loadedLevel;
             var lines = File.ReadAllLines(fileDirectory);
-
             lines[index] = Convert.ToInt32(p_completed).ToString() + ':' + p_levelScore.ToString() + ':' + p_levelMaxScore.ToString();
             File.WriteAllLines(fileDirectory,lines);
         }

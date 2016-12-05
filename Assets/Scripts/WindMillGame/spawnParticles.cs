@@ -28,7 +28,6 @@ public class spawnParticles : MonoBehaviour
     private int index;
 	void Start () 
     {
-        
         BM = this.GetComponent<scr_bagMovement>();
         m_frameCounter = 1;
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
@@ -44,8 +43,11 @@ public class spawnParticles : MonoBehaviour
         {
             SpawnParticlesFromBag();
         }
-
-        if (Input.GetMouseButton(0) && BM.GetThrowBagStatus() )
+        if (Input.GetMouseButtonDown(0) && BM.GetThrowBagStatus() && !BM.GetExtraThrow())
+        {
+            m_exploding = true;
+        }
+        else if (Input.GetMouseButtonDown(0) && !BM.GetPresence() && BM.GetThrowBagStatus())
         {
             m_exploding = true;
         }

@@ -19,13 +19,12 @@ public class scr_IngameUI : MonoBehaviour
     private float m_multiplier;
     //private scr_FileHandler FH;
     private int[] activePotions = new int[3];
-   
+    
     private GameObject[] bagsLeft = new GameObject[3];
 
     void Awake()
     {
         WBH = GameObject.FindGameObjectWithTag("win").GetComponent<scr_winbagBehaviour>();
-
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         FH = GameObject.Find("GameManager").GetComponent<scr_FileHandler>();
     }
@@ -47,17 +46,13 @@ public class scr_IngameUI : MonoBehaviour
         for (int i = 0; i < bagsLeft.Length; i++)
         {
             bagsLeft[i] = GameObject.Find("bagWheat" + i.ToString());
-
-
-           // Debug.Log("How many bags are left: " + GM.GetRemainingBags());
-             
         }
         for (int i = 0; i < activePotions.Length; i++)
         {
             activePotions[i] = FH.GetEquipedPotions(i);
+            Debug.Log(FH.GetEquipedPotions(i));
         }
     }
-
 
     //    Bronze: 25 gold, 4k flour score.
     //    Silver: 50 gold, 5500 flour score.
@@ -97,6 +92,10 @@ public class scr_IngameUI : MonoBehaviour
 	void Update () 
     {
         UpdateTexts();
+        
+        if(Input.GetKey(KeyCode.S))
+        Debug.Log(FH.GetEquipedPotions(2));
+
 	}
     void UpdateTexts()
     {
