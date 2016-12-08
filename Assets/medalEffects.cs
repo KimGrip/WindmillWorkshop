@@ -52,6 +52,7 @@ public class medalEffects : MonoBehaviour
         if (scaleUpwards)
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(minMaxButtonScale.y, minMaxButtonScale.y, transform.localScale.y), buttonMorphSpeed);
+            Debug.Log("ScaleUp");
             if (transform.localScale.y >= minMaxButtonScale.y)
             {
                 scaleUpwards = false;
@@ -64,6 +65,7 @@ public class medalEffects : MonoBehaviour
         else
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(minMaxButtonScale.z, minMaxButtonScale.z, transform.localScale.z), buttonMorphSpeed);
+            Debug.Log("ScaleDown");
             PS.Stop();
         }
     }

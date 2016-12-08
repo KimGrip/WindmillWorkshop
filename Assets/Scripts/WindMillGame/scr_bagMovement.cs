@@ -72,11 +72,14 @@ public class scr_bagMovement : MonoBehaviour
     {
         return throwExtraOnce;
     }
+    public bool GetPresence()
+    {
+        return extraThrow;
+    }
     public void SetExtraThrow(bool state)
     {
-        extraThrow = state;
+            extraThrow = state;
     }
-
     public void SetBagBounciness(float value)
     {
         bagMaterial.bounciness = value;
@@ -221,14 +224,14 @@ public class scr_bagMovement : MonoBehaviour
             CS.MoveTowardsWinBag();
             bagTempPos = Vector3.zero;
         }
-        if(extraThrow && throwExtraOnce && isThrown && Input.GetMouseButtonDown(0))
+        if (extraThrow && throwExtraOnce && isThrown && Input.GetMouseButtonDown(0))
         {
 
             direction = objectPos - transform.position;
             direction.Normalize();
             bagRB.velocity = direction * throwStrenght;
             throwExtraOnce = false;
-   
+
             ISG.PlayBagShootSound();
         }
     }
@@ -268,7 +271,6 @@ public class scr_bagMovement : MonoBehaviour
                 hasTakenPosInput = false;
 
             }
-
         }
     }
     public bool GetThrowBagStatus()
@@ -284,6 +286,16 @@ public class scr_bagMovement : MonoBehaviour
             ISG.PlayBagHitSounds();
             m_morphBag = true;
             scaleUpwards = false;
+        }
+   
+    }
+    void OnTriggerEnter2D(Collider2D colli)
+    {
+        if (colli.gameObject.tag == "gold" && isThrown)
+        {
+            Debug.Log("gold");
+            GM.AddGold(1);
+            colli.gameObject.SetActive(false);
         }
     }
 }
