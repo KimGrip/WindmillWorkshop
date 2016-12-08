@@ -21,7 +21,7 @@ public class scr_FileHandler : MonoBehaviour
     private int[] equipedPotions = new int[3];
     private List<int> l_UpgradeStatus = new List<int>();
 
-    void Start()
+    void Awake()
     {
         fileDirectory = Application.dataPath + "/Settings.txt";
         if (!File.Exists(fileDirectory)) // If the file is there
@@ -143,7 +143,6 @@ public class scr_FileHandler : MonoBehaviour
     {
         string ResResult = System.Text.RegularExpressions.Regex.Replace(resolution, @"\D", "");
         int[] resNumbers = new int[ResResult.Length];
-        
     }
     int LoadLastLevelIndex(StreamReader reader, string level)
     {

@@ -16,30 +16,48 @@ public class scr_converter : MonoBehaviour
 
     public float convertionTimePerParticle;
     private float m_convertionTimer;
-	// Use this for initialization
-	void Start () 
+    private ParticleSystem PS;
+    private float stopPSTimer = 1.0f;
+
+    // Use this for initialization
+    void Start()
     {
         objPooler = GameObject.FindGameObjectWithTag("pooler");
-	}
-	
-	// Update is called once per frame
-	void Update () 
+        PS = GetComponent<ParticleSystem>();
+        PS.Stop();
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-        if(m_convertionTimer >= convertionTimePerParticle)
+        if (m_convertionTimer >= convertionTimePerParticle)
         {
             if (storedObjects >= convertionRate)
             {
                 spawnMultiplier = storedObjects / convertionRate;
-                if(spawnMultiplier >= 1.0f / convertionRate)
+                if (spawnMultiplier >= 1.0f / convertionRate)
                 {
                     spawnMultiplier = 1.0f / convertionRate;
+                    PS.Play();
                 }
                 SpawnConvertedItems();
             }
             m_convertionTimer = 0;
         }
         m_convertionTimer = m_convertionTimer + Time.deltaTime;
-	}
+
+        if (PS.isPlaying)
+        {
+            if (stopPSTimer >= 0.5f)
+            {
+                PS.Stop();
+                stopPSTimer = 0f;
+            }
+            stopPSTimer = stopPSTimer + Time.deltaTime;
+        }
+
+    }
+
     Vector3 RandomCircle(Vector3 center, float radius)
     {
         float ang = Random.value * 360;
@@ -53,7 +71,7 @@ public class scr_converter : MonoBehaviour
     {
         for (int i = 0; i < spawnMultiplier; i++)
         {
-            Vector3 pos = new Vector3((this.transform.position.x - 0.4f )+ 0.1f * i, this.transform.position.y - 0.8f * transform.lossyScale.y, 0);
+            Vector3 pos = new Vector3((this.transform.position.x - 0.4f) + 0.1f * i, this.transform.position.y - 0.8f * transform.lossyScale.y, 0);
             if (OutputObject.name == objPooler.GetComponent<scr_obp>().GetGameObjectFromType(GameObjectType.P1).name)
             {
                 GameObject obj = objPooler.GetComponent<scr_obp>().GetGameObjectFromType(GameObjectType.P1);
@@ -76,12 +94,14 @@ public class scr_converter : MonoBehaviour
         {
             colli.gameObject.SetActive(false);
             storedObjects++;
+
         }
         if (colli.gameObject.tag == "particle" && colli.gameObject.name != "p2")
         {
             colli.gameObject.SetActive(false);
+
         }
-        if(colli.gameObject.tag == "particle" && colli.gameObject.name == "p2")
+        if (colli.gameObject.tag == "particle" && colli.gameObject.name == "p2")
         {
             colli.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 0.8f * transform.lossyScale.y, colli.gameObject.transform.position.z);
         }
