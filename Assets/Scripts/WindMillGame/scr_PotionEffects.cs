@@ -129,7 +129,7 @@ public class scr_PotionEffects : MonoBehaviour
                 SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Slow_Motion:
-                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, Time.timeScale / 0.5f);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, 0.5f);
                 break;
             case PotionType.Score:
                 SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, Time.timeScale);
@@ -164,5 +164,9 @@ public class scr_PotionEffects : MonoBehaviour
         BM.GetRB().drag = m_drag;
         BM.GetRB().gravityScale = m_gravity;
         Time.timeScale = m_timeScale;
+    }
+    public float GetGoldMultiplier()
+    {
+        return m_goldMultiplier;
     }
 }
