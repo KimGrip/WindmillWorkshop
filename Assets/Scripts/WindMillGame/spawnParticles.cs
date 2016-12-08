@@ -39,6 +39,7 @@ public class spawnParticles : MonoBehaviour
 	}
 	void Update () 
     {
+    
         if(EnableRightClickSpawning)
         {
             SpawnParticlesFromBag();
