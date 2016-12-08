@@ -68,6 +68,13 @@ public class scr_bagMovement : MonoBehaviour
         remainingBounces = bounces;
         ISG = GameObject.Find("GameManager").GetComponent<scr_IngameSoundManager>();
     }
+    void Start()
+    {
+        if (aimingArrow == null)
+        {
+            aimingArrow = transform.FindChild("aiming_arrow").gameObject;
+        }
+    }
     public bool GetExtraThrow()
     {
         return throwExtraOnce;
@@ -94,6 +101,7 @@ public class scr_bagMovement : MonoBehaviour
     }
     void Update()
     {
+ 
         if(m_morphBag)
         {
             MorphBag();
