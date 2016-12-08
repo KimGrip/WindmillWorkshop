@@ -46,7 +46,6 @@ public class scr_IngameSoundManager : MonoBehaviour
 
     void Awake()
     {
- 
         MuiscManager = GameObject.Find("MusicManager").GetComponent<scr_BackgroundMusic>();
         if(!MuiscManager)
         {

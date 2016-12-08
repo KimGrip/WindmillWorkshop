@@ -27,6 +27,8 @@ public class scr_obp : MonoBehaviour
     private GameObject lowestYParticle;
 
     private float m_timer;
+    [Space(20)]
+    public List<Sprite> m_GrainSprites;
     void Awake()
     {
         current = this;
@@ -109,7 +111,11 @@ public class scr_obp : MonoBehaviour
     {
         if(type == GameObjectType.P1)
         {
-            return GetGameObjectFromList(l_particle_1, false);
+            GameObject obj = GetGameObjectFromList(l_particle_1, false);
+            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+            sr.sprite = m_GrainSprites[Random.Range(0, m_GrainSprites.Count)];
+
+            return obj;
         }
         if (type == GameObjectType.P2)
         {
