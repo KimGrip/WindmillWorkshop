@@ -17,7 +17,7 @@ public class scr_bagMovement : MonoBehaviour
     private scr_GameManager GM;
     private ParticleSystem PS;
     private BoxCollider2D bagThrowBoundaries;
-
+    private BoxCollider2D BagCollider;
     public int bounces;
     private int remainingBounces;
     public float bouncePower;
@@ -43,6 +43,8 @@ public class scr_bagMovement : MonoBehaviour
         throwExtraOnce = true;
         startScale = transform.localScale.x;
         hasTakenPosInput = false;
+        BagCollider = GetComponent<BoxCollider2D>();
+        BagCollider.isTrigger = true;
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
@@ -179,6 +181,8 @@ public class scr_bagMovement : MonoBehaviour
             DecideThrowStrenght(objectPos, bagTempPos);
             bagRB.gravityScale = 1;
             bagRB.velocity = direction * throwPower * throwStrenght;
+            BagCollider.isTrigger = false;
+
         }
     }
     float DecideThrowStrenght(Vector2 target, Vector2 start)

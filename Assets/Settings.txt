@@ -1,8 +1,8 @@
 Upgrades: 0,0,0,0,0,0,0,0,0,0,0
-Gold: 29
+Gold: 6526
 SoundFX: 0.5
 Music: 0.5
 Resolution: (1920.0, 1080.0)
 WindowMode: 1
 lvl: 8
-potions: 2,4,5,
+potions: 2,4,0,
