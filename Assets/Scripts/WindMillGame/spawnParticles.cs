@@ -88,6 +88,7 @@ public class spawnParticles : MonoBehaviour
             GameObject obj = objectPooler.GetComponent<scr_obp>().GetGameObjectFromType(GameObjectType.P1);
 
             obj.transform.position = new Vector3(pos.x, pos.y, 0);
+            obj.transform.localScale = transform.localScale;
             obj.SetActive(true);
 
             Rigidbody2D rb = objectPooler.GetParticleRB(obj); //causes lagg, needs predeclared pointer somehow

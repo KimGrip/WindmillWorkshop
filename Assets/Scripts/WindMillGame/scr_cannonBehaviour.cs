@@ -34,6 +34,7 @@ public class scr_cannonBehaviour : MonoBehaviour
             {
                 FireCannon();
                 ISM.PlayCannonSounds(0, false);
+                shootBag = false;
             }
             m_cannonCooldownCounter = 0;
         }
@@ -94,6 +95,7 @@ public class scr_cannonBehaviour : MonoBehaviour
     {
         if (colli.gameObject.tag == "particle" )
         {
+            colli.transform.parent = null;
             collectedGameObjects.Add(colli.gameObject);
             colli.gameObject.SetActive(false);
             collectedParticles += 1;
@@ -102,7 +104,7 @@ public class scr_cannonBehaviour : MonoBehaviour
         else if( colli.gameObject.tag == "bag")
         {
             collectedGameObjects.Add(colli.gameObject);
-            ISM.PlayCannonSounds(1, true);
+           // ISM.PlayCannonSounds(1, true);
             shootBag = true;
         }
     }

@@ -120,7 +120,7 @@ public class scr_PotionEffects : MonoBehaviour
                 SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Gigantic:
-                SetVariables(1.0f, 1.5f, 1, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.0f, 1.0f, 1, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Success:
                 SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, Time.timeScale);

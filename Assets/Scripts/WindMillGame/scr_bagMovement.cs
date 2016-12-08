@@ -284,6 +284,7 @@ public class scr_bagMovement : MonoBehaviour
     {
         if (colli.gameObject.tag == "wall" && isThrown)
         {
+            
             SP.SpawnParticles(ParticleType.normal);
             remainingBounces -= 1;
             ISG.PlayBagHitSounds();
@@ -296,7 +297,6 @@ public class scr_bagMovement : MonoBehaviour
     {
         if (colli.gameObject.tag == "gold" && isThrown)
         {
-            Debug.Log("gold");
             GM.AddGold(1);
             colli.gameObject.SetActive(false);
         }
