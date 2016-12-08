@@ -68,6 +68,13 @@ public class scr_bagMovement : MonoBehaviour
         remainingBounces = bounces;
         ISG = GameObject.Find("GameManager").GetComponent<scr_IngameSoundManager>();
     }
+    void Start()
+    {
+        if (aimingArrow == null)
+        {
+            aimingArrow = transform.FindChild("aiming_arrow").gameObject;
+        }
+    }
     public bool GetExtraThrow()
     {
         return throwExtraOnce;
@@ -94,6 +101,7 @@ public class scr_bagMovement : MonoBehaviour
     }
     void Update()
     {
+ 
         if(m_morphBag)
         {
             MorphBag();
@@ -186,20 +194,16 @@ public class scr_bagMovement : MonoBehaviour
         Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
         float y = objectPos.y;
         float x = objectPos.x;
-        transform.position = new Vector3(x, y, 0);
+        transform.position = new Vector3(x, y, 0); // Follows the mouse Position
 
-        ClampBagPos();
-    }
-    void ClampBagPos()
-    {
+
         Vector2 x_minMAx = new Vector2(bagThrowBoundaries.bounds.extents.x, bagThrowBoundaries.bounds.extents.y); //returns the height and width to center
         Vector2 boxPos = bagThrowBoundaries.transform.position;
-        // smallest, bounds - pos
-        Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x); 
-        Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);     
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, xLimit.x, xLimit.y), Mathf.Clamp(transform.position.y, yLimit.x, yLimit.y), transform.position.z);
-        Debug.Log("clamp");
+        Vector2 xLimit = new Vector2(-x_minMAx.x - -boxPos.x, x_minMAx.x + boxPos.x);
+        Vector2 yLimit = new Vector2(-x_minMAx.y - -boxPos.y, x_minMAx.y + boxPos.y);
 
+
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, xLimit.x, xLimit.y), Mathf.Clamp(transform.position.y, yLimit.x, yLimit.y), transform.position.z);
     }
     public Rigidbody2D GetRB()
     {
@@ -269,7 +273,6 @@ public class scr_bagMovement : MonoBehaviour
                 CS.SetCameraOrtographicSize(8.0f);
                 CS.SetCameraRestriction(false, true);
                 hasTakenPosInput = false;
-
             }
         }
     }

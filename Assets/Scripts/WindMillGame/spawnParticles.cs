@@ -26,7 +26,7 @@ public class spawnParticles : MonoBehaviour
     private bool m_exploding;
     private int m_frameCounter;
     private int index;
-	void Start () 
+	void Awake () 
     {
         BM = this.GetComponent<scr_bagMovement>();
         m_frameCounter = 1;
@@ -110,7 +110,6 @@ public class spawnParticles : MonoBehaviour
     }
     public void SpawnParticles(ParticleType type)
     {
-       
         particleAmount = particleAmount - l_ParticlesPerBounce[index];
         for (int i = 0; i < l_ParticlesPerBounce[index]; i++)
         {
@@ -133,8 +132,7 @@ public class spawnParticles : MonoBehaviour
         direction = selfPos - targetPos;
         Vector2 force = direction * particleSpawnForce;
         force = force * Random.Range(0.5f, 1.5f)+ extraVel;
-        return force ;
-        
+        return force;
     }
     Vector3 RandomCircle(Vector3 center, float radius)
     {

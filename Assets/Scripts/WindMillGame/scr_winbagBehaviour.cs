@@ -14,6 +14,7 @@ public class scr_winbagBehaviour : MonoBehaviour
     private scr_GameManager GM;
     private scr_bagMovement BM;
     private scr_IngameSoundManager ISM;
+    private scr_PotionEffects PE;
     private scr_obp pooler;
     private scr_FileHandler FH;
     private int collectedParticles;
@@ -38,7 +39,8 @@ public class scr_winbagBehaviour : MonoBehaviour
         ISM = GM.GetComponent<scr_IngameSoundManager>();
         pooler = GameObject.FindGameObjectWithTag("pooler").GetComponent<scr_obp>();
         FH = GM.GetComponent<scr_FileHandler>();
-        
+        PE = GM.GetComponent<scr_PotionEffects>();
+
         collectedParticles = 0;
         m_particle_1_score = GM.GetParticleScore(0);
         m_particle_2_score = GM.GetParticleScore(1);
@@ -63,11 +65,8 @@ public class scr_winbagBehaviour : MonoBehaviour
     }
     void SaveLevelInfo(int worldIndex , float p_levelScore, float p_levelMaxScore)
     {
-
-        FH.WriteGoldAmount(GM.GetGold().ToString());
-        Debug.Log("asd");
-
-
+        float goldAmount = GM.GetGold() * PE.GetGoldMultiplier();
+        FH.WriteGoldAmount(goldAmount.ToString());
 
         bool p_completed;
         if(m_score > GM.GetMedalValue(0) * maxScore)

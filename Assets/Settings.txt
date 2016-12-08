@@ -1,5 +1,5 @@
 Upgrades: 0,0,0,0,0,0,0,0,0,0,0
-Gold: 7
+Gold: 29
 SoundFX: 0.5
 Music: 0.5
 Resolution: (1920.0, 1080.0)

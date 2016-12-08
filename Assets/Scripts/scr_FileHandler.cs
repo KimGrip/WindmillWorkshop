@@ -143,7 +143,6 @@ public class scr_FileHandler : MonoBehaviour
     {
         string ResResult = System.Text.RegularExpressions.Regex.Replace(resolution, @"\D", "");
         int[] resNumbers = new int[ResResult.Length];
-        
     }
     int LoadLastLevelIndex(StreamReader reader, string level)
     {

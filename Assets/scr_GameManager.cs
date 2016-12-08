@@ -112,7 +112,6 @@ public class scr_GameManager : MonoBehaviour
         if (m_DisplayOnce)
         {
             ISM.PlayStageEnd();
-
             MedalSpawnPosition.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
 
             if (m_EGS == EndGameState.master)
@@ -280,6 +279,5 @@ public class scr_GameManager : MonoBehaviour
         PE.SetBag(obj);
         PE.SetBMPointer(obj.GetComponent<scr_bagMovement>());
         PE.SetSPPointer(obj.GetComponent<spawnParticles>());
-
     }
 }
