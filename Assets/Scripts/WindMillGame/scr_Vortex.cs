@@ -13,6 +13,7 @@ public class scr_Vortex : MonoBehaviour
     private List<Rigidbody2D> m_trappedRBs;
     public float PullInPower;
     public float PullInSpeed;
+    public float MagnitudeDivider;
     private Transform center;
     public float m_eventHorizonDistance;
     public float m_RotationSpeed;
@@ -72,7 +73,7 @@ public class scr_Vortex : MonoBehaviour
             else
             {
                 m_trappedRBs[i].velocity = Vector2.MoveTowards(m_trappedRBs[i].velocity, directionToCenter, PullInSpeed * Time.deltaTime);
-                var fraction = (center.position - m_trappedItems[i].transform.position).magnitude / 5;
+                var fraction = (center.position - m_trappedItems[i].transform.position).magnitude / MagnitudeDivider;
                 var maxGravity = 25.0f;
                 float gravity;
                 if (fraction < 0.0)
@@ -87,8 +88,8 @@ public class scr_Vortex : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D colli)
     {
-      
-        if (colli.gameObject.tag == "particle")
+
+        if (colli.gameObject.tag == "particle" )
         {
             m_trappedItems.Add(colli.gameObject);
             Rigidbody2D rb = colli.gameObject.GetComponent<Rigidbody2D>();
@@ -117,13 +118,41 @@ public class scr_Vortex : MonoBehaviour
                 }
             }
         }
-
-        if(colli.gameObject.tag == "bag")
+        if (colli.gameObject.tag == "bag")
         {
+            m_trappedItems.Add(colli.gameObject);
+            Rigidbody2D rb = colli.gameObject.GetComponent<Rigidbody2D>();
+            rb.gravityScale = 0;
+            m_trappedRBs.Add(rb);
             colli.transform.SetParent(transform);
-            colli.GetComponent<Rigidbody2D>().velocity = colli.GetComponent<Rigidbody2D>().velocity / 2;
-            colli.GetComponent<Rigidbody2D>().gravityScale = 0;
+            Vortex.AddUntrappable(colli.gameObject);
+
+            for (int i = 0; i < unTrappableItems.Count; i++)
+            {
+                if (colli.gameObject == unTrappableItems[i].gameObject)
+                {
+
+                    GameObject obj;
+                    obj = colli.gameObject;
+                    for (int y = 0; y < m_trappedItems.Count; y++)
+                    {
+                        if (m_trappedItems[y] == obj)
+                        {
+                            m_trappedItems.Remove(m_trappedItems[y]);
+                            m_trappedRBs[y].gravityScale = 1;
+                            m_trappedRBs.Remove(m_trappedRBs[y]);
+                            colli.transform.SetParent(null);
+                        }
+                    }
+                }
+            }
         }
+        //if(colli.gameObject.tag == "bag")
+        //{
+        //    colli.transform.SetParent(transform);
+        //    colli.GetComponent<Rigidbody2D>().velocity = colli.GetComponent<Rigidbody2D>().velocity / 2;
+        //    colli.GetComponent<Rigidbody2D>().gravityScale = 0;
+        //}
     }
     void OnTriggerExit2D(Collider2D colli)
     {

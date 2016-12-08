@@ -91,7 +91,6 @@ public class scoreEffect : MonoBehaviour {
         {
             timeToStop = timeToStop + Time.deltaTime;
         }
-        Debug.Log(scorePosition);
         
         scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
 //        glassJarPosition.position = new Vector3(Camera.main.transform.position.x + 10f, Camera.main.transform.position.y, transform.position.z);
