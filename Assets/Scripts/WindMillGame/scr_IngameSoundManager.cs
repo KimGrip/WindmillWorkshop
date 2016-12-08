@@ -3,8 +3,9 @@ using System.Collections;
 
 public class scr_IngameSoundManager : MonoBehaviour
 {
+    private scr_BackgroundMusic MuiscManager;
+
     public AudioClip backGroundMusic;
-    public AudioSource BGMusicSource;
 
     public AudioSource[] soundFXsources;
 
@@ -45,11 +46,16 @@ public class scr_IngameSoundManager : MonoBehaviour
 
     void Awake()
     {
+ 
+        MuiscManager = GameObject.Find("MusicManager").GetComponent<scr_BackgroundMusic>();
+        if(!MuiscManager)
+        {
+            Debug.LogError("Scene NEEDS MUSIC MANAGER -> required lvl objects");
+        }
+        MuiscManager.SetBackGroundMusic(backGroundMusic);
         m_collectParticlePitch = 1;
         m_cannonCollectingPitch = 1;
-        BGMusicSource.clip = backGroundMusic;
         //BGMusicSource.pitch = Random.Range(0.25f, 1.5f);
-        BGMusicSource.Play();
 
         for (int i = 0; i < soundFXsources.Length; i++)
         {
@@ -116,17 +122,19 @@ public class scr_IngameSoundManager : MonoBehaviour
 
         }
     }
-    public void SetBGMusicState(bool playSound)
-    {
-        if (playSound)
-        {
-            BGMusicSource.UnPause();
-        }
-        else if (!playSound)
-        {
-            BGMusicSource.Pause();
-        }
-    }
+
+    //}
+    //public void SetBGMusicState(bool playSound)
+    //{
+    //    if (playSound)
+    //    {
+    //        BGMusicSource.UnPause();
+    //    }
+    //    else if (!playSound)
+    //    {
+    //        BGMusicSource.Pause();
+    //    }
+    //}
     public bool IsSourceIsPlayingSound(int index)
     {
 
