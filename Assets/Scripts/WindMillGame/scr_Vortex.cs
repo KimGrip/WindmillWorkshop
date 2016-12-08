@@ -44,7 +44,8 @@ public class scr_Vortex : MonoBehaviour
         m_trappedRBs[y].velocity = -directionToCenter * PullInPower;
         m_trappedRBs[y].gravityScale = 1;
         m_trappedItems[y].transform.SetParent(null);
-        m_trappedItems[y].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+   //     m_trappedItems[y].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         m_trappedItems[y].transform.position = portal_2.transform.position;
         Vortex.AddUntrappable(m_trappedItems[y]);
