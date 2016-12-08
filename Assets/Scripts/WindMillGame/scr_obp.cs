@@ -29,6 +29,7 @@ public class scr_obp : MonoBehaviour
     private float m_timer;
     [Space(20)]
     public List<Sprite> m_GrainSprites;
+    private float particleMass;
     void Awake()
     {
         current = this;
@@ -107,11 +108,17 @@ public class scr_obp : MonoBehaviour
         }
         return null;
     }
+    public void SetParticleMass(float mass)
+    {
+        particleMass = mass;
+    }
    public GameObject GetGameObjectFromType(GameObjectType type)
     {
         if(type == GameObjectType.P1)
         {
             GameObject obj = GetGameObjectFromList(l_particle_1, false);
+            Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
+            rb.mass = particleMass;
             SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
             sr.sprite = m_GrainSprites[Random.Range(0, m_GrainSprites.Count)];
 
