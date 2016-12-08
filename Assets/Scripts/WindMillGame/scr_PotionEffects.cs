@@ -10,6 +10,7 @@ public class scr_PotionEffects : MonoBehaviour
     private scr_FileHandler FH;
     private scr_IngameSoundManager IS;
     private scr_GameManager GM;
+    private scr_obp pooler;
     //Winbag
     private scr_winbagBehaviour WBH;
     
@@ -29,7 +30,7 @@ public class scr_PotionEffects : MonoBehaviour
     private float m_scoreEndMultiplier;
     private float m_drag;
     private float m_timeScale;
-
+    private float m_mass;
 
 
     //0. NONE
@@ -67,7 +68,7 @@ public class scr_PotionEffects : MonoBehaviour
         SP = GameObject.FindGameObjectWithTag("bag").GetComponent<spawnParticles>();
         BM = GameObject.FindGameObjectWithTag("bag").GetComponent<scr_bagMovement>();
         bag = GameObject.FindGameObjectWithTag("bag");
-
+        pooler = GameObject.FindGameObjectWithTag("pooler").GetComponent<scr_obp>();
 
        //  none, SuperBounce, Gigantic, Minature, Success, Presence, Iron, Score , Slow_Motion
         m_potionType[0] = PotionType.none;
@@ -114,35 +115,35 @@ public class scr_PotionEffects : MonoBehaviour
             //  bouncePower, scaleMultiplier, goldMultiplier, extraThrow,  gravity, scoreEndMultiplier, drag,  timeScale)
 
             case PotionType.SuperBounce:
-                SetVariables(1.25f, 0.5f, 1, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.25f, 0.5f, 1, false, 1, 1, 0, Time.timeScale,0.05f);
                 break;
             case PotionType.none:
-                SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, Time.timeScale, 0.05f);
                 break;
             case PotionType.Gigantic:
-                SetVariables(1.0f, 1.0f, 1, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.0f, 1.0f, 1, false, 1, 1, 0, Time.timeScale, 0.1f);
                 break;
             case PotionType.Success:
-                SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, Time.timeScale, 0.05f);
                 break;
             case PotionType.Minature:
-                SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, Time.timeScale);
+                SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, Time.timeScale, 0.05f);
                 break;
             case PotionType.Slow_Motion:
-                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, 0.5f);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, 0.5f, 0.05f);
                 break;
             case PotionType.Score:
-                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, Time.timeScale);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, Time.timeScale, 0.05f);
                 break;
             case PotionType.Presence:
-                SetVariables(1.0f, 0.5f, 1.0f, true, 1, 1.0f, 0, Time.timeScale);
+                SetVariables(1.0f, 0.5f, 1.0f, true, 1, 1.0f, 0, Time.timeScale, 0.05f);
                 break;
             case PotionType.Iron:
-                SetVariables(0.1f, 0.5f, 1.0f, false, 2.0f, 1.0f, 0, Time.timeScale);
+                SetVariables(0.1f, 0.5f, 1.0f, false, 2.0f, 1.0f, 0, Time.timeScale, 0.05f);
                 break;
         }
 	}
-    void SetVariables(float p_bouncePower, float p_scaleMultiplier, float p_goldMultiplier, bool p_extraThrow, float p_gravity, float p_scoreEndMultiplier, float p_drag, float p_timeScale)
+    void SetVariables(float p_bouncePower, float p_scaleMultiplier, float p_goldMultiplier, bool p_extraThrow, float p_gravity, float p_scoreEndMultiplier, float p_drag, float p_timeScale, float p_mass)
     {
         m_bouncePower = p_bouncePower;
         m_ScaleMultiplier = p_scaleMultiplier;
@@ -152,7 +153,7 @@ public class scr_PotionEffects : MonoBehaviour
         m_scoreEndMultiplier = p_scoreEndMultiplier;
         m_drag = p_drag;
         m_timeScale = p_timeScale;
-
+        m_mass = p_mass;
         SetClassVariables();
     }
     void SetClassVariables()
@@ -163,6 +164,7 @@ public class scr_PotionEffects : MonoBehaviour
         BM.SetExtraThrow(m_extraThrow);
         BM.GetRB().drag = m_drag;
         BM.GetRB().gravityScale = m_gravity;
+        pooler.SetParticleMass(m_mass);
         Time.timeScale = m_timeScale;
     }
     public float GetGoldMultiplier()
