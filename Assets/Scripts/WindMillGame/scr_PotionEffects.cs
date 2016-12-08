@@ -29,6 +29,11 @@ public class scr_PotionEffects : MonoBehaviour
     private float m_scoreEndMultiplier;
     private float m_drag;
     private float m_timeScale;
+
+
+
+    //0. NONE
+
     //1.    SuperBounce Potion: 
     //-	Makes the bag increase in velocity for three bounces. Get 25% more velocity instead of slowing down for 3 bounces. (Make sure bag doesn’t clip out of level.)
 
@@ -99,42 +104,41 @@ public class scr_PotionEffects : MonoBehaviour
     PotionType GetPotionType()
     {
         int index =  FH.GetEquipedPotions(GM.GetRemainingBags());
-
-        Debug.Log(m_potionType[index]);
         return m_potionType[index];
     }
 	void Update () 
     {
+
         switch (GetPotionType())
         {
             //  bouncePower, scaleMultiplier, goldMultiplier, extraThrow,  gravity, scoreEndMultiplier, drag,  timeScale)
 
             case PotionType.SuperBounce:
-                SetVariables(1.25f, 0.5f, 1, false, 1, 1, 0, 1);
+                SetVariables(1.25f, 0.5f, 1, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.none:
-                SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 0.5f, 1, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Gigantic:
-                SetVariables(1.0f, 1.5f, 1, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 1.0f, 1, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Success:
-                SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.5f, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Minature:
-                SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, 1);
+                SetVariables(1.0f, 0.3f, 1.0f, false, 1, 1, 0, Time.timeScale);
                 break;
             case PotionType.Slow_Motion:
                 SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1, 0, 0.5f);
                 break;
             case PotionType.Score:
-                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.0f, false, 1, 1.05f, 0, Time.timeScale);
                 break;
             case PotionType.Presence:
-                SetVariables(1.0f, 0.5f, 1.0f, true, 1, 1.0f, 0, 1);
+                SetVariables(1.0f, 0.5f, 1.0f, true, 1, 1.0f, 0, Time.timeScale);
                 break;
             case PotionType.Iron:
-                SetVariables(0.1f, 0.5f, 1.0f, false, 2.0f, 1.0f, 0, 1);
+                SetVariables(0.1f, 0.5f, 1.0f, false, 2.0f, 1.0f, 0, Time.timeScale);
                 break;
         }
 	}
@@ -160,5 +164,9 @@ public class scr_PotionEffects : MonoBehaviour
         BM.GetRB().drag = m_drag;
         BM.GetRB().gravityScale = m_gravity;
         Time.timeScale = m_timeScale;
+    }
+    public float GetGoldMultiplier()
+    {
+        return m_goldMultiplier;
     }
 }

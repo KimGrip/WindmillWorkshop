@@ -26,9 +26,8 @@ public class spawnParticles : MonoBehaviour
     private bool m_exploding;
     private int m_frameCounter;
     private int index;
-	void Start () 
+	void Awake () 
     {
-        
         BM = this.GetComponent<scr_bagMovement>();
         m_frameCounter = 1;
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
@@ -44,8 +43,11 @@ public class spawnParticles : MonoBehaviour
         {
             SpawnParticlesFromBag();
         }
-
-        if (Input.GetMouseButton(0) && BM.GetThrowBagStatus() )
+        if (Input.GetMouseButtonDown(0) && BM.GetThrowBagStatus() && !BM.GetExtraThrow())
+        {
+            m_exploding = true;
+        }
+        else if (Input.GetMouseButtonDown(0) && !BM.GetPresence() && BM.GetThrowBagStatus())
         {
             m_exploding = true;
         }
@@ -86,6 +88,7 @@ public class spawnParticles : MonoBehaviour
             GameObject obj = objectPooler.GetComponent<scr_obp>().GetGameObjectFromType(GameObjectType.P1);
 
             obj.transform.position = new Vector3(pos.x, pos.y, 0);
+            obj.transform.localScale = transform.localScale;
             obj.SetActive(true);
 
             Rigidbody2D rb = objectPooler.GetParticleRB(obj); //causes lagg, needs predeclared pointer somehow
@@ -108,7 +111,6 @@ public class spawnParticles : MonoBehaviour
     }
     public void SpawnParticles(ParticleType type)
     {
-       
         particleAmount = particleAmount - l_ParticlesPerBounce[index];
         for (int i = 0; i < l_ParticlesPerBounce[index]; i++)
         {
@@ -131,8 +133,7 @@ public class spawnParticles : MonoBehaviour
         direction = selfPos - targetPos;
         Vector2 force = direction * particleSpawnForce;
         force = force * Random.Range(0.5f, 1.5f)+ extraVel;
-        return force ;
-        
+        return force;
     }
     Vector3 RandomCircle(Vector3 center, float radius)
     {

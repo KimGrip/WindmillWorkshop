@@ -21,6 +21,7 @@ public class scr_GameManager : MonoBehaviour
     public List<GameObject> endResult;
     public int MaxWinParticlesNeeded;
     private scr_CameraScript m_Camera;
+    private scr_FileHandler FH;
     private scr_IngameSoundManager ISM;
     private bool m_showEndGameMenu;
     private bool m_DisplayOnce;
@@ -49,7 +50,7 @@ public class scr_GameManager : MonoBehaviour
         m_EGS = EndGameState.none;
         ISM = GetComponent<scr_IngameSoundManager>();
         PE = GetComponent<scr_PotionEffects>();
-
+        FH = GetComponent<scr_FileHandler>();
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))
         {
             Instantiate(bag, m_bagSpawnPos.position, Quaternion.identity);
@@ -63,9 +64,15 @@ public class scr_GameManager : MonoBehaviour
     {
         return m_gold;
     }
+    public void AddGold(int amount)
+    {
+        m_gold += amount;
+    }
     void Start()
     {
         ISM.PlayStageStart();
+        m_gold = FH.GetGold();
+
     }
     public int GetMaxWinParticles()
     {
@@ -105,7 +112,6 @@ public class scr_GameManager : MonoBehaviour
         if (m_DisplayOnce)
         {
             ISM.PlayStageEnd();
-
             MedalSpawnPosition.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, transform.position.z);
 
             if (m_EGS == EndGameState.master)
@@ -270,10 +276,8 @@ public class scr_GameManager : MonoBehaviour
         bag.SetActive(true);
         m_bagAmount -= 1;
 
-
         PE.SetBag(obj);
         PE.SetBMPointer(obj.GetComponent<scr_bagMovement>());
         PE.SetSPPointer(obj.GetComponent<spawnParticles>());
-
     }
 }

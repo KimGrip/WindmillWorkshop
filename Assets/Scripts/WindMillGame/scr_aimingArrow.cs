@@ -7,7 +7,7 @@ public class scr_aimingArrow : MonoBehaviour {
     private scr_bagMovement bagMovement;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
     {
         bag = GameObject.FindGameObjectWithTag("bag");
         bagMovement = bag.GetComponent<scr_bagMovement>();
@@ -34,7 +34,7 @@ public class scr_aimingArrow : MonoBehaviour {
 		Vector3 ArrowTransform = new Vector3 (transform.position.x, transform.position.y);
 		Quaternion lookAt = Quaternion.LookRotation(BagTransform - ArrowTransform);
 		transform.rotation = Quaternion.RotateTowards (transform.rotation, lookAt, 0f);
-
+       
     }
     void AimingArrowSize()
     {
