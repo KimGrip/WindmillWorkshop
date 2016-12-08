@@ -48,6 +48,10 @@ public class scr_IngameSoundManager : MonoBehaviour
     {
  
         MuiscManager = GameObject.Find("MusicManager").GetComponent<scr_BackgroundMusic>();
+        if(!MuiscManager)
+        {
+            Debug.LogError("Scene NEEDS MUSIC MANAGER -> required lvl objects");
+        }
         MuiscManager.SetBackGroundMusic(backGroundMusic);
         m_collectParticlePitch = 1;
         m_cannonCollectingPitch = 1;
