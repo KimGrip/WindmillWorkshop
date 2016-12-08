@@ -103,7 +103,6 @@ public class scr_AlchemyShop : MonoBehaviour
             }
         }
 	}
-
     public void AddItemToEquipment(GameObject obj)
     {
         if (equipedItemIndex == equipedPotions.Length)
@@ -122,7 +121,6 @@ public class scr_AlchemyShop : MonoBehaviour
         potionSelected = false;
         selectedTransform = null;
     }
-
 	void Update () 
     {
         if(Input.GetKey(KeyCode.A))
@@ -152,7 +150,7 @@ public class scr_AlchemyShop : MonoBehaviour
             {
                 DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && l_Inventory[selectedTransformIndex].m_bought)
             {
                 Debug.Log("deselecting Potino");
                 ResetPotionPos(selectedTransform.gameObject);
@@ -171,8 +169,6 @@ public class scr_AlchemyShop : MonoBehaviour
             DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
         }
 	}
-  
-    
     public void ResetPotionPos(GameObject obj)
     {
         for (int i = 0; i < ES.Length; i++)
@@ -187,7 +183,6 @@ public class scr_AlchemyShop : MonoBehaviour
         }
         Debug.Log("ResetPotionPos");
         obj.transform.position = l_Inventory[selectedTransformIndex].m_originalPos;
-   
     }
 
     void MovePotion(Transform obj)
