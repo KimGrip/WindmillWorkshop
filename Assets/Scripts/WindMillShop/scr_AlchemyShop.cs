@@ -26,7 +26,7 @@ public class scr_AlchemyShop : MonoBehaviour
     private Transform potion_0_0;
     private Transform canvas;
     private Text[] m_texts;
-    private scr_FileHandler FS;
+    private scr_FileHandler FH;
     public List<String> potionDescritions;
     [Space(20)]
     public List<GameObject> l_potionTypes;
@@ -47,7 +47,6 @@ public class scr_AlchemyShop : MonoBehaviour
 
 	void Start () 
     {
-        m_gold = 500;
         potionSelected = false;
         selectedTransform = null;
         ableToMove = true;
@@ -55,7 +54,8 @@ public class scr_AlchemyShop : MonoBehaviour
         potion_info_BG = transform.FindChild("potion_info_BG");
         potionInfoButton[0] = potion_info_BG.FindChild("potion_accept").gameObject;
         potionInfoButton[1] = potion_info_BG.FindChild("potion_decline").gameObject;
-        FS = GetComponent<scr_FileHandler>();
+        FH = GetComponent<scr_FileHandler>();
+        m_gold = FH.GetGold();
         potion_info_Picture = GameObject.Find("potionPicture").GetComponent<SpriteRenderer>();
         potion_info_BG.gameObject.SetActive(false);
         canvas = transform.FindChild("Canvas");
@@ -65,7 +65,6 @@ public class scr_AlchemyShop : MonoBehaviour
             m_texts[i] = canvas.GetChild(i).GetComponent<Text>();
             m_texts[i].enabled = false;
         }
-
         Equipment_BG = transform.FindChild("Equipment_BG");
         potion_0_0 = GameObject.Find("potion_0_0").transform;
         equipmentSlots = GameObject.FindGameObjectsWithTag("slot");
@@ -80,7 +79,7 @@ public class scr_AlchemyShop : MonoBehaviour
                 //All of these variables need to be read in through text file,perhaps new one just for potions.
                 InvetoryPotion IP = new InvetoryPotion();
                 IP.m_unlocked = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
-                IP.m_potionType = UnityEngine.Random.Range(0, 5);
+                IP.m_potionType = UnityEngine.Random.Range(0, l_potionTypes.Count);
                 IP.m_goldCost = UnityEngine.Random.Range(5, 25);
                 IP.m_bought = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
                 IP.m_description = potionDescritions[IP.m_potionType];
@@ -103,6 +102,11 @@ public class scr_AlchemyShop : MonoBehaviour
             }
         }
 	}
+    void UpdateGoldText()
+    {
+        m_texts[2].enabled = true;
+        m_texts[2].text = "Gold: " + m_gold.ToString();
+    }
     public void AddItemToEquipment(GameObject obj)
     {
         if (equipedItemIndex == equipedPotions.Length)
@@ -117,28 +121,21 @@ public class scr_AlchemyShop : MonoBehaviour
                 equipedItemIndex += 1;
             }
         }
+        FH.WriteEquipedPotions(equipedPotions);
+
         selectedTransformIndex = 0;
         potionSelected = false;
         selectedTransform = null;
     }
 	void Update () 
     {
-        if(Input.GetKey(KeyCode.A))
-        {
-            FS.WriteEquipedPotions(equipedPotions);
-        }
-        else if(Input.GetKey(KeyCode.D))
-        {
-            for (int i = 0; i < 3; i++ )
-            {
-                Debug.Log(FS.GetEquipedPotions(i));
-            }
-        }
+
+        UpdateGoldText();
+
         if (selectedTransform != null)
         {
             potionSelected = true;
         }
-
         if(potionSelected)    //selected transfom != null
         {
             if (l_Inventory[selectedTransformIndex].m_bought && ableToMove )  // Move and display info for bought objects
@@ -150,9 +147,8 @@ public class scr_AlchemyShop : MonoBehaviour
             {
                 DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
-            if (Input.GetMouseButtonUp(0) && l_Inventory[selectedTransformIndex].m_bought)
+            if (Input.GetMouseButtonDown(0) && selectedTransform != null)
             {
-                Debug.Log("deselecting Potino");
                 ResetPotionPos(selectedTransform.gameObject);
                 ableToMove = false;
                 selectedTransform = null;
@@ -175,13 +171,13 @@ public class scr_AlchemyShop : MonoBehaviour
         {
             if (ES[i].GetAttachedPotion() == obj && selectedTransform != null)
             {
-                //  selectedTransform.position = l_Inventory[selectedTransformIndex].m_originalPos;
+                //selectedTransform.position = l_Inventory[selectedTransformIndex].m_originalPos;
                 //ableToMove = false;
                 //selectedTransform = null;
                 //potionSelected = false;
+                //selectedTransformIndex = 0;
             }
         }
-        Debug.Log("ResetPotionPos");
         obj.transform.position = l_Inventory[selectedTransformIndex].m_originalPos;
     }
 
@@ -214,7 +210,7 @@ public class scr_AlchemyShop : MonoBehaviour
         potion_info_BG.gameObject.SetActive(active);
         potion_info_Picture.sprite = l_potionTypes[l_Inventory[index].m_potionType].GetComponent<SpriteRenderer>().sprite;
         
-        for (int i = 0; i < m_texts.Length; i++)
+        for (int i = 0; i < 2; i++)
         {
             m_texts[i].enabled = active;
         }
@@ -224,7 +220,7 @@ public class scr_AlchemyShop : MonoBehaviour
         }
         m_texts[0].text = "Cost: " + l_Inventory[index].m_goldCost.ToString();
         m_texts[1].text = l_Inventory[index].m_description;
-        
+
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -266,12 +262,10 @@ public class scr_AlchemyShop : MonoBehaviour
                 {
                     potionSelected = false;
                     selectedTransform = null;
-                }
-        
+                }   
             }
             if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, potion_mask))
             {
-
                 Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
                 for (int i = 0; i < l_Inventory.Count; i++)
                 {
@@ -294,7 +288,6 @@ public class scr_AlchemyShop : MonoBehaviour
     }
     Transform SelectPotion()
     {
-        Debug.Log("selectpotion");
         Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layer_mask = LayerMask.GetMask("potion");
         if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))

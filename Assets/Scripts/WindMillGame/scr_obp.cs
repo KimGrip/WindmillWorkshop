@@ -38,6 +38,13 @@ public class scr_obp : MonoBehaviour
         PutIntoList(m_particle_3_storage, l_particle_3, particle_3, "p3");
         ISM = GameObject.Find("GameManager").GetComponent<scr_IngameSoundManager>();
     }
+    void Start()
+    {
+        if(m_GrainSprites.Count == 0)
+        {
+            Debug.LogError("GameManger->Pooler->GrainSpritnes->NEED SPRITES!!!");
+        }
+    }
     void Update()
     {
         //function, check Type in list, if not correct item, check next list
