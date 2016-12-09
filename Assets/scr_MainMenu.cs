@@ -233,7 +233,7 @@ public class scr_MainMenu : MonoBehaviour
                 }
                 else if(obj.name == "Main_Menu_SHOP")
                 {
-                    SceneManager.LoadScene("windmill_001");
+                    SceneManager.LoadScene(12);
                 }
                 else if (obj.name == "Main_Menu_OPTIONS")
                 {

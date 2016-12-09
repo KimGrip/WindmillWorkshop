@@ -141,9 +141,32 @@ public class scr_AlchemyShop : MonoBehaviour
         potionSelected = false;
         selectedTransform = null;
     }
+    void CheckEscapeButtons()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+            int layer_mask = LayerMask.GetMask("button");
+            if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
+            {
+                Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
+                if (obj.name == "MainMenu")
+                {
+                    SceneManager.LoadScene(0);
+                }
+                else if(obj.name =="OverWorld")
+                {
+                    SceneManager.LoadScene(11);
+
+                }
+            }
+
+
+        }
+    }
 	void Update () 
     {
-
+        CheckEscapeButtons();
         UpdateGoldText();
 
         if (selectedTransform != null)

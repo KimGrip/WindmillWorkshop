@@ -198,9 +198,9 @@ public class scr_GameManager : MonoBehaviour
                     Application.OpenURL("https://docs.google.com/forms/d/1Z00IarFUP5H8czNhRzySRa-H9fMCDFif3JoYpJAHVdY/edit?usp=sharing");
                     OpenSurveyOnce = false;
                 }
-                else if(obj.name == "Restart")
+                else if (obj.name == "GoToShop")
                 {
-                    SceneManager.LoadScene(Application.loadedLevel);
+                    SceneManager.LoadScene(12);
                 }
                 else if (obj.name == "Overworld")
                 {
