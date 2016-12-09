@@ -123,22 +123,10 @@ public class scr_AlchemyShop : MonoBehaviour
     }
 	void Update () 
     {
-        if(Input.GetKey(KeyCode.A))
-        {
-            FS.WriteEquipedPotions(equipedPotions);
-        }
-        else if(Input.GetKey(KeyCode.D))
-        {
-            for (int i = 0; i < 3; i++ )
-            {
-                Debug.Log(FS.GetEquipedPotions(i));
-            }
-        }
         if (selectedTransform != null)
         {
             potionSelected = true;
         }
-
         if(potionSelected)    //selected transfom != null
         {
             if (l_Inventory[selectedTransformIndex].m_bought && ableToMove )  // Move and display info for bought objects
@@ -150,7 +138,7 @@ public class scr_AlchemyShop : MonoBehaviour
             {
                 DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
-            if (Input.GetMouseButtonUp(0) && l_Inventory[selectedTransformIndex].m_bought)
+            if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("deselecting Potino");
                 ResetPotionPos(selectedTransform.gameObject);
@@ -294,7 +282,6 @@ public class scr_AlchemyShop : MonoBehaviour
     }
     Transform SelectPotion()
     {
-        Debug.Log("selectpotion");
         Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layer_mask = LayerMask.GetMask("potion");
         if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
