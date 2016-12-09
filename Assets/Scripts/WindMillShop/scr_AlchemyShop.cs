@@ -37,7 +37,10 @@ public class scr_AlchemyShop : MonoBehaviour
     [Space(20)]
     private GameObject[] equipmentSlots = new GameObject[3];
     private scr_EquipmentSlot[] ES = new scr_EquipmentSlot[3];
-    private GameObject[] potionInfoButton = new GameObject[2];
+    private GameObject accept;
+    private GameObject decline;
+
+
     private int m_gold;
     private Transform selectedTransform;
     private int selectedTransformIndex;
@@ -51,13 +54,19 @@ public class scr_AlchemyShop : MonoBehaviour
         selectedTransform = null;
         ableToMove = true;
         Inventory_BG = transform.FindChild("Inventory_BG");
-        potion_info_BG = transform.FindChild("potion_info_BG");
-        potionInfoButton[0] = potion_info_BG.FindChild("potion_accept").gameObject;
-        potionInfoButton[1] = potion_info_BG.FindChild("potion_decline").gameObject;
+        potion_info_BG = GameObject.Find("potion_info_BG").transform;
+        accept = GameObject.Find("potion_accept").gameObject;
+        decline = GameObject.Find("potion_decline").gameObject;
+
         FH = GetComponent<scr_FileHandler>();
         m_gold = FH.GetGold();
         potion_info_Picture = GameObject.Find("potionPicture").GetComponent<SpriteRenderer>();
         potion_info_BG.gameObject.SetActive(false);
+        accept.SetActive(false);
+        decline.SetActive(false);
+        potion_info_Picture.gameObject.SetActive(false);
+
+
         canvas = transform.FindChild("Canvas");
         m_texts = new Text[canvas.childCount];
         for (int i = 0; i < m_texts.Length; i++ )
@@ -72,33 +81,33 @@ public class scr_AlchemyShop : MonoBehaviour
         {
             ES[i] = equipmentSlots[i].GetComponent<scr_EquipmentSlot>();
         }
+        
+        InvetoryPotion[,] potions = FH.GetInventory();
+
         for (int i = 0; i < InventorySize.x; i++)
         {
             for (int y = 0; y < InventorySize.y; y++)
             {   
-                //All of these variables need to be read in through text file,perhaps new one just for potions.
-                InvetoryPotion IP = new InvetoryPotion();
-                IP.m_unlocked = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
-                IP.m_potionType = UnityEngine.Random.Range(0, l_potionTypes.Count);
-                IP.m_goldCost = UnityEngine.Random.Range(5, 25);
-                IP.m_bought = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
-                IP.m_description = potionDescritions[IP.m_potionType];
-                GameObject obj = (GameObject)Instantiate(l_potionTypes[IP.m_potionType], Inventory_BG);
-                IP.m_obj = obj;
 
+                InvetoryPotion IP = new InvetoryPotion();
+                IP.m_potionType = potions[i,y].m_potionType;
+                IP.m_description = potionDescritions[IP.m_potionType];
+                IP.m_unlocked = potions[i,y].m_unlocked;
+                GameObject obj = (GameObject)Instantiate(l_potionTypes[IP.m_potionType], Inventory_BG);
                 obj.transform.position = new Vector2(potion_0_0.position.x + InvetoryItemSpace.x * i, potion_0_0.position.y - InvetoryItemSpace.y * y);
+                IP.m_obj = obj;                
+                IP.m_goldCost = UnityEngine.Random.Range(5, 15);
+                IP.m_bought = potions[i, y].m_bought;
                 IP.m_originalPos = obj.transform.position;
                 l_Inventory.Add(IP);
                 SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
                 
                 if(!IP.m_bought)
-                {
                     sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);
-                }
                 if (!IP.m_unlocked)
-                {
                     sr.color = Color.black;
-                }
+
+                //Index is LINE.
             }
         }
 	}
@@ -121,7 +130,12 @@ public class scr_AlchemyShop : MonoBehaviour
                 equipedItemIndex += 1;
             }
         }
+
+
+
         FH.WriteEquipedPotions(equipedPotions);
+
+
 
         selectedTransformIndex = 0;
         potionSelected = false;
@@ -208,16 +222,16 @@ public class scr_AlchemyShop : MonoBehaviour
     void DisplayPotionInfo(bool active , int index, bool isBought)
     {
         potion_info_BG.gameObject.SetActive(active);
+        accept.gameObject.SetActive(active);
+        decline.gameObject.SetActive(active);
+        potion_info_Picture.gameObject.SetActive(active);
         potion_info_Picture.sprite = l_potionTypes[l_Inventory[index].m_potionType].GetComponent<SpriteRenderer>().sprite;
         
         for (int i = 0; i < 2; i++)
         {
             m_texts[i].enabled = active;
         }
-        for (int i = 0; i < potionInfoButton.Length; i++ )
-        {
-            potionInfoButton[i].SetActive(!isBought);
-        }
+
         m_texts[0].text = "Cost: " + l_Inventory[index].m_goldCost.ToString();
         m_texts[1].text = l_Inventory[index].m_description;
 
@@ -248,6 +262,8 @@ public class scr_AlchemyShop : MonoBehaviour
 
                                 potionSelected = false;
                                 selectedTransform = null;
+                                FH.WriteGoldAmount(m_gold.ToString());
+                                FH.WriteInventory(i, 1, 1, l_Inventory[i].m_potionType, l_Inventory[i].m_goldCost, l_Inventory[i].m_originalPos);
                                 break;
                             }
                             else if (m_gold < l_Inventory[i].m_goldCost)
