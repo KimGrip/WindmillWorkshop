@@ -39,8 +39,17 @@ public class scr_GameManager : MonoBehaviour
     private List<Vector3> l_buttonScale = new List<Vector3>();
     private Transform activeButton;
     private int m_gold;
+    private Transform PopUpMenu;
+    private scr_CanvasStuff CanvasStuff;
+
+    private float M_DelayBeforeLvlSwap;
+    private float m_delayTimer;
+
     void Awake()
     {
+        M_DelayBeforeLvlSwap = 30;
+        PopUpMenu = GameObject.Find("PopUpMenu").GetComponent<Transform>();
+        CanvasStuff = PopUpMenu.GetComponent<scr_CanvasStuff>();
         scaleUpwards = true;
         activeButton = null;
         OpenSurveyOnce = true;
@@ -60,6 +69,7 @@ public class scr_GameManager : MonoBehaviour
         m_showEndGameMenu = false;
         m_DisplayOnce = true;
     }
+    
     public int GetGold()
     {
         return m_gold;
@@ -72,6 +82,7 @@ public class scr_GameManager : MonoBehaviour
     {
         ISM.PlayStageStart();
         m_gold = FH.GetGold();
+        m_delayTimer = 0;
 
     }
     public int GetMaxWinParticles()
@@ -105,6 +116,7 @@ public class scr_GameManager : MonoBehaviour
     public void CheckEndGameConditions()
     {
         GameObject instantiedobject;
+
         if (m_EGS == EndGameState.lose)
         {
             SceneManager.LoadScene(Application.loadedLevel);
@@ -144,6 +156,7 @@ public class scr_GameManager : MonoBehaviour
 
     void EndGameStateMenu()
     {
+        CanvasStuff.SetGameMenuState(true);
         if (GetMorphableButton() != null)
         {
             ScaleButton(GetMorphableButton());
@@ -152,7 +165,13 @@ public class scr_GameManager : MonoBehaviour
         {
             ResetButtonScale(transform);
         }
-
+        if (m_delayTimer > M_DelayBeforeLvlSwap)
+        {
+            SceneManager.LoadScene(Application.loadedLevel + 1);
+        }
+      
+            m_delayTimer = m_delayTimer + Time.deltaTime;
+            Debug.Log("");
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -160,6 +179,7 @@ public class scr_GameManager : MonoBehaviour
 
             if (Physics2D.Raycast(toMouse.origin, toMouse.direction, 999f, layer_mask))
             {
+                m_delayTimer = 0;
                 Transform obj = Physics2D.Raycast(toMouse.origin, toMouse.direction).transform;
                 if (obj.name == "QuitGame")
                 {
@@ -178,10 +198,15 @@ public class scr_GameManager : MonoBehaviour
                     Application.OpenURL("https://docs.google.com/forms/d/1Z00IarFUP5H8czNhRzySRa-H9fMCDFif3JoYpJAHVdY/edit?usp=sharing");
                     OpenSurveyOnce = false;
                 }
+                else if(obj.name == "Restart")
+                {
+                    SceneManager.LoadScene(Application.loadedLevel);
+                }
                 else if (obj.name == "Overworld")
                 {
                     SceneManager.LoadScene("OverWorldScreen");
                 }
+          
                 ISM.PlayButtonClick();
             }
         }

@@ -185,6 +185,7 @@ public class scr_winbagBehaviour : MonoBehaviour
                 if (pooler.GetIdleActiveParticles().Count < 1)
                 {
                     GM.CheckEndGameConditions();
+                    Debug.Log("Checking");
                     SaveLevelInfo(0, m_score, maxScore);
                 }
             }
