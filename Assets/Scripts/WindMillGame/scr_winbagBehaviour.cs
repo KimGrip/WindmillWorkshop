@@ -28,6 +28,18 @@ public class scr_winbagBehaviour : MonoBehaviour
     private float m_particle_3_score;
     private int m_score;
 
+    //Håkans variables for particle systems
+    private ParticleSystem PS1;
+    private ParticleSystem PS2;
+    private ParticleSystem PS3;
+    private float PS1Timer;
+    private float PS2Timer;
+    private float PS3Timer;
+    private Transform emitPosition1;
+    private Transform emitPosition2;
+    private Transform emitPosition3;
+
+
     private StreamReader reader;
     private StreamWriter writer;
 
@@ -49,7 +61,22 @@ public class scr_winbagBehaviour : MonoBehaviour
         //The actual amount of particles;
         maxParticles = GM.GetMaxWinParticles() * GM.GetMaxBagAmount();
         maxScore = maxParticles * (int)m_particle_2_score ;
-	}
+
+        //Håkans particle systems for when particles enters the glassjar
+        emitPosition1 = transform.GetChild(0);
+        PS1 = emitPosition1.GetComponent<ParticleSystem>();
+        PS1.Stop();
+
+        emitPosition2 = transform.GetChild(1);
+        PS2 = emitPosition2.GetComponent<ParticleSystem>();
+        PS2.Stop();
+
+        emitPosition3 = transform.GetChild(2);
+        PS3 = emitPosition3.GetComponent<ParticleSystem>();
+        PS3.Stop();
+        //End Håkans potions
+
+    }
     void ChangeLevel()
     {
         if (Input.GetKey(KeyCode.A))
@@ -118,14 +145,20 @@ public class scr_winbagBehaviour : MonoBehaviour
             if(colli.gameObject.name == "p1")
             {
                 m_score = m_score + (int)m_particle_1_score;
+                emitPosition1.transform.position = colli.gameObject.transform.position;
+                PS1.Play();
             }
             else if (colli.gameObject.name == "p2")
             {
                 m_score = m_score + (int)m_particle_2_score;
+                emitPosition2.transform.position = colli.gameObject.transform.position;
+                PS2.Play();
             }
             else if (colli.gameObject.name == "p3")
             {
                 m_score = m_score + (int)m_particle_3_score;
+                emitPosition3.transform.position = colli.gameObject.transform.position;
+                PS3.Play();
             }
             collectedParticles += 1;
             colli.gameObject.SetActive(false);
