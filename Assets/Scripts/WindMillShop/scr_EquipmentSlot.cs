@@ -30,18 +30,7 @@ public class scr_EquipmentSlot : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D colli)
     {
-
-        if(colli.gameObject.tag == "potion" && !isEmpty)
-        {
-            AS.ResetPotionPos(attachedObject);
-            Debug.Log("replace");
-
-
-            attachedObject = colli.gameObject;
-            attachedObject.transform.position = transform.position;
-            AS.AddItemToEquipment(attachedObject);
-        }
-        else if(colli.gameObject.tag == "potion" && isEmpty)
+        if(colli.gameObject.tag == "potion" && isEmpty)
         {
             attachedObject = colli.gameObject;
             attachedObject.transform.position = transform.position;
