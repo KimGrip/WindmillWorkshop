@@ -28,15 +28,10 @@ public class scoreEffect : MonoBehaviour {
         inGameUI = GameObject.Find("Canvas").GetComponent<scr_IngameUI>();
         oldScore = inGameUI.GetScoreText();
 
-        glassJarPosition = GameObject.FindGameObjectWithTag("win").GetComponent<Transform>();
-        scorePosition = this.transform;
+        //glassJarPosition = GameObject.FindGameObjectWithTag("win").GetComponent<Transform>();
+        //scorePosition = this.transform;
 
-        scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
-        //   Debug.Log(oldScore);
-        //   Debug.Log(inGameUI.GetScoreText());
-
-        //    scaleUpwards = true;
-        //    transform.localScale = new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, minMaxButtonScale.x);
+        //scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
     }
 
     void RunParticles()
@@ -92,7 +87,6 @@ public class scoreEffect : MonoBehaviour {
             timeToStop = timeToStop + Time.deltaTime;
         }
         
-        scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
-//        glassJarPosition.position = new Vector3(Camera.main.transform.position.x + 10f, Camera.main.transform.position.y, transform.position.z);
+        //scorePosition.transform.position = new Vector3(glassJarPosition.transform.position.x, glassJarPosition.transform.position.y, glassJarPosition.transform.position.z);
     }
 }
