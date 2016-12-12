@@ -40,7 +40,6 @@ public class scr_AlchemyShop : MonoBehaviour
     private GameObject accept;
     private GameObject decline;
 
-
     private int m_gold;
     private Transform selectedTransform;
     private int selectedTransformIndex;
@@ -112,15 +111,12 @@ public class scr_AlchemyShop : MonoBehaviour
                         IP.m_unlocked = true;
                         IP.m_bought = true;
                     }
-
                     l_Inventory.Add(IP);
                     SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
-
                     if (!IP.m_bought)
                         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);
                     if (!IP.m_unlocked)
                         sr.color = Color.black;
-
                 }
             }
         }
@@ -171,11 +167,8 @@ public class scr_AlchemyShop : MonoBehaviour
                 else if(obj.name =="OverWorld")
                 {
                     SceneManager.LoadScene("OverWorldScreen");
-
                 }
             }
-
-
         }
     }
 	void Update () 
