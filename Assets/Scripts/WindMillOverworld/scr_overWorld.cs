@@ -115,6 +115,7 @@ public class scr_overWorld : MonoBehaviour
             
 
             reader = new StreamReader(Application.dataPath + "/world_" + i.ToString() + "_data.txt");
+            Debug.Log(Application.dataPath + "/world_" + i.ToString() + "_data.txt");
             for (int y = 0; y < p_world.levelAmount; y++)  // loops through all the levels in each world
             {
                 string line = reader.ReadLine();

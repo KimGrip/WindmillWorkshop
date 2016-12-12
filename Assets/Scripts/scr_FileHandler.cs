@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 public class scr_FileHandler : MonoBehaviour 
 {
     private string fileDirectory;
@@ -20,7 +21,8 @@ public class scr_FileHandler : MonoBehaviour
     private int WindowMode;
     private int[] equipedPotions = new int[3];
     private List<int> l_UpgradeStatus = new List<int>();
-
+    private InvetoryPotion[,] Inventory = new InvetoryPotion[8, 4];
+    
     void Awake()
     {
         fileDirectory = Application.dataPath + "/Settings.txt";
@@ -33,6 +35,19 @@ public class scr_FileHandler : MonoBehaviour
             LoadSettingsFromFile();
         }
     }
+    void Update()
+    {
+        if(Input.GetKey(KeyCode.S))
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                for(int y = 0; y < 4; y++)
+                {
+                    Debug.Log(Inventory[i, y].m_unlocked);
+                }
+            }
+        }
+    }
     public void WriteToFile(int p_lineIdex, string data)
     {
         //1.upgrades int[]
@@ -43,6 +58,7 @@ public class scr_FileHandler : MonoBehaviour
         //6.WindowedMode int
         //7.last level Index int
         //8.Potions equiped
+        //9. Upgares.
         TextWriter tw2 = new StreamWriter(fileDirectory);
         tw2.WriteLine(data, p_lineIdex);
     }
@@ -53,6 +69,11 @@ public class scr_FileHandler : MonoBehaviour
     public void WriteLastLevel(string amount)
     {
         lineChanger("lvl: " + amount, fileDirectory, 7);
+    }
+    public void WriteInventory(int p_index,int unlocked, int bought, int potionType, int goldCost, Vector2 originalPositon)
+    {
+        lineChanger(unlocked.ToString() + ":" + bought.ToString() + ":" + potionType.ToString() + ":" + goldCost.ToString()
+            + ":" + originalPositon.x.ToString() + ":" + originalPositon.y.ToString(), fileDirectory, p_index);
     }
     public void WriteEquipedPotions(int[] potions)
     {
@@ -94,6 +115,9 @@ public class scr_FileHandler : MonoBehaviour
         LatestLevelIndex = LoadLastLevelIndex(reader, reader.ReadLine());
         //8. EqiupedItems
         equipedPotions = LoadEquipedPotions(reader, reader.ReadLine());
+        //9. Inventory
+        Inventory = LoadInventory(reader, reader.ReadLine());
+
 
         reader.Close();
     }
@@ -120,6 +144,10 @@ public class scr_FileHandler : MonoBehaviour
     public int GetEquipedPotions(int index)
     {
         return equipedPotions[index];
+    }
+    public InvetoryPotion[,] GetInventory()
+    {
+        return Inventory;
     }
     int LoadWindowMode(StreamReader reader, string window)
     {
@@ -194,6 +222,53 @@ public class scr_FileHandler : MonoBehaviour
         }
         return SoundFXVolume;
     }
+
+    InvetoryPotion[,] LoadInventory(StreamReader reader, string line)
+    {
+        for(int x =0; x < 8; x++)
+        {
+            for( int y = 0; y < 4; y++)
+            {
+                char splitter = ':';
+                string[] test = line.Split(splitter);
+                string result = System.Text.RegularExpressions.Regex.Replace(line, @"\D", ""); // trims the string to only be numbers
+                for (int i = 0; i < result.Length; i++)
+                {
+                    //gold and OG pos needs separe handflers since they can be multiple objects
+                    
+
+                    //
+
+
+                    
+                    
+
+                    //
+
+
+                    // OBS!!!
+                    //REMOVE THIS
+                    Inventory[x, y].m_unlocked = true;
+                        //Convert.ToBoolean(Convert.ToInt32(result.ElementAt(0).ToString()));
+
+
+                    //
+
+
+
+                    Inventory[x, y].m_bought = Convert.ToBoolean(Convert.ToInt32(result.ElementAt(1).ToString()));
+                    Inventory[x, y].m_potionType = Convert.ToInt32(result.ElementAt(2).ToString());
+                    Inventory[x, y].m_goldCost = Convert.ToInt32(test[3].ToString());
+                    Inventory[x, y].m_originalPos = new Vector2(Convert.ToSingle(test[4].ToString()), Convert.ToSingle(test[5].ToString()));
+                    Debug.Log(Convert.ToInt32(test[2].ToString()));
+                    //Debug.Log(Inventory[x, y].m_potionType);
+                }
+                line = reader.ReadLine();
+
+            }
+        }
+        return Inventory;
+    }
     int LoadGold(StreamReader reader, string gold)
     {
         string result = System.Text.RegularExpressions.Regex.Replace(gold, @"\D", "");
@@ -223,6 +298,7 @@ public class scr_FileHandler : MonoBehaviour
         }
 
     }
+
     int[] LoadEquipedPotions(StreamReader reader, string potions)
     {
         string result = System.Text.RegularExpressions.Regex.Replace(potions, @"\D", "");
@@ -245,7 +321,6 @@ public class scr_FileHandler : MonoBehaviour
         {
             l_UpgradeStatus.Add(0);
         }
-
         for (int i = 0; i < l_UpgradeStatus.Count; i++)
         {
             if (i != 0)
@@ -275,6 +350,16 @@ public class scr_FileHandler : MonoBehaviour
                 tw.Write("\r\npotions: " + equipedPotions[i].ToString());
             }
         }
+        
+        for (int x = 0; x < 8; x++)
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                tw.Write("\r\n:" + Convert.ToInt32(Inventory[x, y].m_unlocked).ToString() + ":" + Convert.ToInt32(Inventory[x, y].m_bought).ToString() + ":" +
+                    Inventory[x, y].m_potionType.ToString() + ":" + Inventory[x, y].m_goldCost.ToString() + ":" + Inventory[x, y].m_originalPos.x.ToString() + ":" + Inventory[x, y].m_originalPos.y.ToString());
+            }
+        }
+
         tw.Close();
     }
 }

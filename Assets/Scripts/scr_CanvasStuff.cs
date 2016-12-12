@@ -19,6 +19,10 @@ public class scr_CanvasStuff : MonoBehaviour
         screenMenuButton = GameObject.Find("Options");
         //Debug.Log("found screen menu: " + screenMenuButton);
 	}
+    public void SetGameMenuState(bool state)
+    {
+        up = state;
+    }
 	
 	// Update is called once per frame
 	void Update () 

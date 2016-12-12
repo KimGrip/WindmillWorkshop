@@ -19,6 +19,7 @@ public class scr_EquipmentSlot : MonoBehaviour
         {
             isEmpty = false;
         }
+        Debug.Log(attachedObject);
 	}
     public bool GetEquipmentSlotStatus()
     {
@@ -51,6 +52,7 @@ public class scr_EquipmentSlot : MonoBehaviour
     public void SetAttachedPotion(GameObject obj)
     {
         attachedObject = obj;
+        attachedObject.transform.position = transform.position;
     }
     public GameObject GetAttachedPotion()
     {
