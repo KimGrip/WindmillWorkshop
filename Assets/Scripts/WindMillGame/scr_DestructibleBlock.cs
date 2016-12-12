@@ -35,7 +35,7 @@ public class scr_DestructibleBlock : MonoBehaviour
     {
         if(colli.gameObject.tag =="bag")
         {
-            DestroyBlock();
+            HP = 0;
         }
         else if(colli.gameObject.tag == "particle")
         {

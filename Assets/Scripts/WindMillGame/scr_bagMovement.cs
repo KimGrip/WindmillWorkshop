@@ -16,6 +16,7 @@ public class scr_bagMovement : MonoBehaviour
     private scr_IngameSoundManager ISG;
     private scr_GameManager GM;
     private ParticleSystem PS;
+    private ParticleSystem PSGold;
     private BoxCollider2D bagThrowBoundaries;
     private BoxCollider2D BagCollider;
     public int bounces;
@@ -37,6 +38,8 @@ public class scr_bagMovement : MonoBehaviour
     private bool extraThrow;
     private bool throwExtraOnce;
     public float scaleSpeed;
+    
+
     void Awake()
     {
         extraThrow = false;
@@ -48,6 +51,9 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
+        PSGold = GameObject.Find("goldPickup").GetComponent<ParticleSystem>();
+        
+
         if (GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>() != null)
         {
             bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
@@ -63,7 +69,8 @@ public class scr_bagMovement : MonoBehaviour
         bagRB = bag.GetComponent<Rigidbody2D>();
         bagRB.isKinematic = true;
         SP = gameObject.GetComponent<spawnParticles>();
-        PS.enableEmission = false;
+        PS.Stop();
+        PSGold.Stop();
 
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
@@ -173,7 +180,7 @@ public class scr_bagMovement : MonoBehaviour
             mousePos = new Vector3(mousePos.x, mousePos.y, 1);
             Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 direction;
-            PS.enableEmission = true;
+            PS.Play();
 
             direction = objectPos - bagTempPos;
             direction.Normalize();
@@ -294,6 +301,8 @@ public class scr_bagMovement : MonoBehaviour
             ISG.PlayBagHitSounds();
             m_morphBag = true;
             scaleUpwards = false;
+            CS.ShakeCamera(0.35f, 0.25f);
+
         }
    
     }
@@ -302,7 +311,12 @@ public class scr_bagMovement : MonoBehaviour
         if (colli.gameObject.tag == "gold" && isThrown)
         {
             GM.AddGold(1);
-            colli.gameObject.SetActive(false);
+            PSGold.Play();
+            //colli.gameObject.SetActive(false);
+            SpriteRenderer SR = colli.GetComponent<SpriteRenderer>();
+            SR.enabled = false;
+            colli.enabled = false;
+            
         }
     }
 }

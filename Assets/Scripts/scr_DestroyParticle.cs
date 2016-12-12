@@ -10,9 +10,7 @@ public class scr_DestroyParticle : MonoBehaviour
 	void Start () 
     {
         emitPosition = transform.GetChild(0);
-        Debug.Log("emitPos; " + emitPosition);
         PS = emitPosition.GetComponent<ParticleSystem>();
-        Debug.Log("PS: " + PS);
         PS.Stop();
         //emitPosition = (GameObject)Instantiate(emitPosition, transform); 
 	}

@@ -28,6 +28,17 @@ public class scr_CameraScript : MonoBehaviour
     private bool doOnce;
     private Vector3 m_mousePos;
     private BoxCollider2D m_CameraBounds;
+
+
+
+    private float m_smoothTime = 0.15f;
+    private Vector2 vel;
+    private float shake;
+    private float shakeAmount = 0;
+    private float shakeTimer = 0;
+
+
+
     // Use this for initialization
     void Start()
     {
@@ -46,13 +57,40 @@ public class scr_CameraScript : MonoBehaviour
     //camera shake
     //if press space, skip camera first pan.
 
+    public void ShakeCamera(float shakePower, float shakeDuration)
+    {
+        shakeAmount = shakePower;
+        shakeTimer = shakeDuration;
+
+        if (!bag)
+        {
+            float posX = Mathf.SmoothDamp(transform.position.x, bag.transform.position.x, ref vel.x, m_smoothTime);
+            float posY = Mathf.SmoothDamp(transform.position.y, bag.transform.position.y, ref vel.y, m_smoothTime);
+
+            transform.position = new Vector3(posX, posY, transform.position.z);
+        }
+    }
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            ShakeCamera(0.5f, 1f);
+        }
+        if (shakeTimer > 0)
+        {
+            Vector2 shakePos = Random.insideUnitCircle * shakeAmount;
+            transform.position = new Vector3(transform.position.x + shakePos.x, transform.position.y + shakePos.y, transform.position.z);
+            shakeTimer -= Time.deltaTime;
+        }
+
         bag = GameObject.FindGameObjectWithTag("bag");
         if (bag != null)
         {
             BM = bag.GetComponent<scr_bagMovement>();
         }
+
+ 
+
         if (Input.GetMouseButton(1))
         {
             CameraRightClickPan();
