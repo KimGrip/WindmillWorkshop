@@ -135,19 +135,19 @@ public class scr_GameManager : MonoBehaviour
             else if (m_EGS == EndGameState.gold)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[2], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
             else if (m_EGS == EndGameState.silver)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[1], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
             else if (m_EGS == EndGameState.bronze)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[0], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
         }

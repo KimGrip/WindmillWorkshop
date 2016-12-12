@@ -62,10 +62,13 @@ public class scr_CameraScript : MonoBehaviour
         shakeAmount = shakePower;
         shakeTimer = shakeDuration;
 
-        float posX = Mathf.SmoothDamp(transform.position.x, bag.transform.position.x, ref vel.x, m_smoothTime);
-        float posY = Mathf.SmoothDamp(transform.position.y, bag.transform.position.y, ref vel.y, m_smoothTime);
+        if (!bag)
+        {
+            float posX = Mathf.SmoothDamp(transform.position.x, bag.transform.position.x, ref vel.x, m_smoothTime);
+            float posY = Mathf.SmoothDamp(transform.position.y, bag.transform.position.y, ref vel.y, m_smoothTime);
 
-        transform.position = new Vector3(posX, posY, transform.position.z);
+            transform.position = new Vector3(posX, posY, transform.position.z);
+        }
     }
     void Update()
     {

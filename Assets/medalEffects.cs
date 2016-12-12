@@ -12,6 +12,8 @@ public class medalEffects : MonoBehaviour
     public Vector3 minMaxButtonScale;
     public float buttonMorphSpeed;
     public float startBeforeDoneTime;
+    private scr_CameraScript CS;
+    private Camera mainCam;
 
     // Use this for initialization
     void Start()
@@ -20,6 +22,8 @@ public class medalEffects : MonoBehaviour
         PS.Stop();
         scaleUpwards = true;
         transform.localScale = new Vector3(minMaxButtonScale.x, minMaxButtonScale.x, minMaxButtonScale.x);
+        CS = Camera.main.GetComponent<scr_CameraScript>();
+        mainCam = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
 
@@ -56,10 +60,13 @@ public class medalEffects : MonoBehaviour
             if (transform.localScale.y >= minMaxButtonScale.y)
             {
                 scaleUpwards = false;
+                CS.ShakeCamera(0.5f, 0.2f);
+
             }
             else if (transform.localScale.y >= minMaxButtonScale.y - startBeforeDoneTime)
             {
                 PS.Play();
+
             }
         }
         else

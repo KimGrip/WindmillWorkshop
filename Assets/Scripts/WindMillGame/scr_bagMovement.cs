@@ -38,6 +38,8 @@ public class scr_bagMovement : MonoBehaviour
     private bool extraThrow;
     private bool throwExtraOnce;
     public float scaleSpeed;
+    
+
     void Awake()
     {
         extraThrow = false;
@@ -299,6 +301,8 @@ public class scr_bagMovement : MonoBehaviour
             ISG.PlayBagHitSounds();
             m_morphBag = true;
             scaleUpwards = false;
+            CS.ShakeCamera(0.35f, 0.25f);
+
         }
    
     }
