@@ -64,7 +64,7 @@ public class scr_bagMovement : MonoBehaviour
         bag = this.gameObject;
         bagRB = bag.GetComponent<Rigidbody2D>();
         bagRB.isKinematic = true;
-        //SP = gameObject.GetComponent<spawnParticles>();
+        SP = gameObject.GetComponent<spawnParticles>();
         PS.Stop();
         PSGold.Stop();
 
