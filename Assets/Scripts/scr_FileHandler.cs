@@ -98,7 +98,7 @@ public class scr_FileHandler : MonoBehaviour
         goldAmount = 0;
         SoundFXVolume = 0;
         resolution = new Vector2(1920, 1080);
-        LatestLevelIndex = 0;
+        LatestLevelIndex = 1;
         //1.upgrades int[]
         LoadUpgrades(reader, reader.ReadLine());
         //2.gold int
@@ -188,6 +188,7 @@ public class scr_FileHandler : MonoBehaviour
             finalLevel = levelNumbers[i] * Convert.ToInt32(Math.Pow(10, levelResult.Length - i - 1));
         }
         LatestLevelIndex = finalLevel;
+        LatestLevelIndex = 1;
         return LatestLevelIndex;
     }
     float LoadMusicVolume(StreamReader reader, string MusicFX)
@@ -296,7 +297,6 @@ public class scr_FileHandler : MonoBehaviour
         {
             l_UpgradeStatus[y] = (int)Char.GetNumericValue(result.ElementAt(y));
         }
-
     }
 
     int[] LoadEquipedPotions(StreamReader reader, string potions)
