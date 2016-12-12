@@ -49,7 +49,9 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
-        PSGold = GetComponentInChildren<ParticleSystem>();
+        PSGold = GameObject.Find("goldPickup").GetComponent<ParticleSystem>();
+        
+
         if (GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>() != null)
         {
             bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
@@ -64,7 +66,7 @@ public class scr_bagMovement : MonoBehaviour
         bag = this.gameObject;
         bagRB = bag.GetComponent<Rigidbody2D>();
         bagRB.isKinematic = true;
-        //SP = gameObject.GetComponent<spawnParticles>();
+        SP = gameObject.GetComponent<spawnParticles>();
         PS.Stop();
         PSGold.Stop();
 
@@ -176,7 +178,6 @@ public class scr_bagMovement : MonoBehaviour
             mousePos = new Vector3(mousePos.x, mousePos.y, 1);
             Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 direction;
-            //PS.enableEmission = true;
             PS.Play();
 
             direction = objectPos - bagTempPos;
@@ -307,7 +308,11 @@ public class scr_bagMovement : MonoBehaviour
         {
             GM.AddGold(1);
             PSGold.Play();
-            colli.gameObject.SetActive(false);
+            //colli.gameObject.SetActive(false);
+            SpriteRenderer SR = colli.GetComponent<SpriteRenderer>();
+            SR.enabled = false;
+            colli.enabled = false;
+            
         }
     }
 }
