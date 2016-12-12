@@ -159,6 +159,10 @@ public class scr_overWorld : MonoBehaviour
                         m_selectedWorld = obj.gameObject;
                     }
                 }
+                if (obj.name == "alchemyShop")
+                {
+                    SceneManager.LoadScene("Alchemy_Store");
+                }
             }
         }
     }
