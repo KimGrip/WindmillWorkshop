@@ -167,11 +167,10 @@ public class scr_GameManager : MonoBehaviour
         }
         if (m_delayTimer > M_DelayBeforeLvlSwap)
         {
+
             SceneManager.LoadScene(Application.loadedLevel + 1);
         }
-      
-            m_delayTimer = m_delayTimer + Time.deltaTime;
-            Debug.Log("");
+       m_delayTimer = m_delayTimer + Time.deltaTime;
         if (Input.GetMouseButton(0))
         {
             Ray toMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -195,12 +194,12 @@ public class scr_GameManager : MonoBehaviour
                 }
                 else if (obj.name == "GoToSurvey" && OpenSurveyOnce)
                 {
-                    Application.OpenURL("https://docs.google.com/forms/d/1Z00IarFUP5H8czNhRzySRa-H9fMCDFif3JoYpJAHVdY/edit?usp=sharing");
+                    Application.OpenURL("https://docs.google.com/forms/d/14ZwGeqB-mTxFhlXsr_CfAi_tIdxg7NKE1g78hy19vNo/edit?usp=sharing");
                     OpenSurveyOnce = false;
                 }
                 else if (obj.name == "GoToShop")
                 {
-                    SceneManager.LoadScene(12);
+                    SceneManager.LoadScene("Alchemy_Store");
                 }
                 else if (obj.name == "Overworld")
                 {

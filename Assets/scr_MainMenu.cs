@@ -62,7 +62,7 @@ public class scr_MainMenu : MonoBehaviour
         SoundFXVolume = 0;
         resolution = new Vector2(1920, 1080);
         WindowMode = 1;
-        LatestLevelIndex = 0;
+        LatestLevelIndex = 1;
 
         //1.upgrades int[]
         LoadUpgrades(reader, reader.ReadLine());
@@ -187,7 +187,7 @@ public class scr_MainMenu : MonoBehaviour
         WindowMode = 1;
         SoundFXVolume = 0.5f;
         MusicVolume = 0.5f;
-        LatestLevelIndex = 0;   
+        LatestLevelIndex = 1;   
 
         for (int i = 0; i < 11;i++ )
         {

@@ -80,34 +80,48 @@ public class scr_AlchemyShop : MonoBehaviour
         for (int i = 0; i < equipmentSlots.Length; i++ )
         {
             ES[i] = equipmentSlots[i].GetComponent<scr_EquipmentSlot>();
+            equipedPotions[i] = FH.GetEquipedPotions(i);
+            Debug.Log(equipedPotions[i]);
+            
         }
-        
         InvetoryPotion[,] potions = FH.GetInventory();
 
-        for (int i = 0; i < InventorySize.x; i++)
+        for (int x = 0; x < equipedPotions.Length; x++)
         {
-            for (int y = 0; y < InventorySize.y; y++)
-            {   
+            for (int i = 0; i < InventorySize.x; i++)
+            {
+                for (int y = 0; y < InventorySize.y; y++)
+                {
 
-                InvetoryPotion IP = new InvetoryPotion();
-                IP.m_potionType = potions[i,y].m_potionType;
-                IP.m_description = potionDescritions[IP.m_potionType];
-                IP.m_unlocked = potions[i,y].m_unlocked;
-                GameObject obj = (GameObject)Instantiate(l_potionTypes[IP.m_potionType], Inventory_BG);
-                obj.transform.position = new Vector2(potion_0_0.position.x + InvetoryItemSpace.x * i, potion_0_0.position.y - InvetoryItemSpace.y * y);
-                IP.m_obj = obj;                
-                IP.m_goldCost = UnityEngine.Random.Range(5, 15);
-                IP.m_bought = potions[i, y].m_bought;
-                IP.m_originalPos = obj.transform.position;
-                l_Inventory.Add(IP);
-                SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
-                
-                if(!IP.m_bought)
-                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);
-                if (!IP.m_unlocked)
-                    sr.color = Color.black;
+                    InvetoryPotion IP = new InvetoryPotion();
+                    IP.m_potionType = potions[i, y].m_potionType;
+                    IP.m_description = potionDescritions[IP.m_potionType];
+                    IP.m_unlocked = potions[i, y].m_unlocked;
+                    GameObject obj = (GameObject)Instantiate(l_potionTypes[IP.m_potionType], Inventory_BG);
+                    obj.transform.position = new Vector2(potion_0_0.position.x + InvetoryItemSpace.x * i, potion_0_0.position.y - InvetoryItemSpace.y * y);
+                    IP.m_obj = obj;
+                    IP.m_goldCost = UnityEngine.Random.Range(5, 15);
+                    IP.m_bought = potions[i, y].m_bought;
+                    IP.m_originalPos = obj.transform.position;
 
-                //Index is LINE.
+
+                    if (IP.m_potionType == equipedPotions[x] && ES[x].GetAttachedPotion() == null)
+                    {
+                        Debug.Log("Setting");
+                        ES[x].SetAttachedPotion(obj);
+                        IP.m_unlocked = true;
+                        IP.m_bought = true;
+                    }
+
+                    l_Inventory.Add(IP);
+                    SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
+
+                    if (!IP.m_bought)
+                        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);
+                    if (!IP.m_unlocked)
+                        sr.color = Color.black;
+
+                }
             }
         }
 	}
@@ -156,7 +170,7 @@ public class scr_AlchemyShop : MonoBehaviour
                 }
                 else if(obj.name =="OverWorld")
                 {
-                    SceneManager.LoadScene(11);
+                    SceneManager.LoadScene("OverWorldScreen");
 
                 }
             }
