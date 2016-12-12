@@ -206,6 +206,10 @@ public class scr_GameManager : MonoBehaviour
                 {
                     SceneManager.LoadScene("OverWorldScreen");
                 }
+                else if(obj.name == "Restart")
+                {
+                    SceneManager.LoadScene(Application.loadedLevel);
+                }
           
                 ISM.PlayButtonClick();
             }

@@ -119,6 +119,7 @@ public class scr_MainMenu : MonoBehaviour
             finalLevel = levelNumbers[i] * Convert.ToInt32(Math.Pow(10, levelResult.Length - i - 1));
         }
         LatestLevelIndex = finalLevel;
+        Debug.Log(finalLevel);
 
     }
     void LoadMusicVolume(StreamReader reader, string MusicFX)
@@ -229,11 +230,11 @@ public class scr_MainMenu : MonoBehaviour
 
                 if (obj.name == "Main_Menu_PLAY")
                 {
-                    LoadLatestLevel();
+                    SceneManager.LoadScene(1);
                 }
                 else if(obj.name == "Main_Menu_SHOP")
                 {
-                    SceneManager.LoadScene(12);
+                    SceneManager.LoadScene("Alchemy_Store");
                 }
                 else if (obj.name == "Main_Menu_OPTIONS")
                 {
