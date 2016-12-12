@@ -16,6 +16,7 @@ public class scr_bagMovement : MonoBehaviour
     private scr_IngameSoundManager ISG;
     private scr_GameManager GM;
     private ParticleSystem PS;
+    private ParticleSystem PSGold;
     private BoxCollider2D bagThrowBoundaries;
     private BoxCollider2D BagCollider;
     public int bounces;
@@ -48,6 +49,7 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
+        PSGold = GetComponentInChildren<ParticleSystem>();
         if (GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>() != null)
         {
             bagThrowBoundaries = GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>();
@@ -62,8 +64,9 @@ public class scr_bagMovement : MonoBehaviour
         bag = this.gameObject;
         bagRB = bag.GetComponent<Rigidbody2D>();
         bagRB.isKinematic = true;
-        SP = gameObject.GetComponent<spawnParticles>();
-        PS.enableEmission = false;
+        //SP = gameObject.GetComponent<spawnParticles>();
+        PS.Stop();
+        PSGold.Stop();
 
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
@@ -173,7 +176,8 @@ public class scr_bagMovement : MonoBehaviour
             mousePos = new Vector3(mousePos.x, mousePos.y, 1);
             Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 direction;
-            PS.enableEmission = true;
+            //PS.enableEmission = true;
+            PS.Play();
 
             direction = objectPos - bagTempPos;
             direction.Normalize();
@@ -302,6 +306,7 @@ public class scr_bagMovement : MonoBehaviour
         if (colli.gameObject.tag == "gold" && isThrown)
         {
             GM.AddGold(1);
+            PSGold.Play();
             colli.gameObject.SetActive(false);
         }
     }
