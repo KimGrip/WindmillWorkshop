@@ -25,15 +25,15 @@ public class scr_MainMenu : MonoBehaviour
     private List<int> l_UpgradeStatus = new List<int>();
 	void Start () 
     {
-        fileDirectory = Application.dataPath + "/Settings.txt";
-        if (!File.Exists(fileDirectory)) // If the file is there
-        {
-            CreateSettingsFile();
-        }
-        else if(File.Exists(fileDirectory))
-        {
-            LoadSettingsFromFile();
-        }
+        //fileDirectory = Application.dataPath + "/Settings.txt";
+        //if (!File.Exists(fileDirectory)) // If the file is there
+        //{
+        //    CreateSettingsFile();
+        //}
+        //else if(File.Exists(fileDirectory))
+        //{
+        //    LoadSettingsFromFile();
+        //}
 	}
 	void Update () 
     {
@@ -242,6 +242,10 @@ public class scr_MainMenu : MonoBehaviour
                 else if(obj.name == "Main_Menu_OVERWORLD")
                 {
                     SceneManager.LoadScene("OverWorldScreen");
+                }
+                else if(obj.name == "Main_Menu_EXIT")
+                {
+                    Application.Quit();
                 }
             }
         }

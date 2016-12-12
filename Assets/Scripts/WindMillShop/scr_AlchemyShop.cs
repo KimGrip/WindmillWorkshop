@@ -40,14 +40,14 @@ public class scr_AlchemyShop : MonoBehaviour
     private GameObject accept;
     private GameObject decline;
 
-
     private int m_gold;
     private Transform selectedTransform;
+    private Transform prevSelectedTF;
     private int selectedTransformIndex;
     private int equipedItemIndex;
     private bool potionSelected;
     private bool ableToMove;
-
+  
 	void Start () 
     {
         potionSelected = false;
@@ -57,7 +57,7 @@ public class scr_AlchemyShop : MonoBehaviour
         potion_info_BG = GameObject.Find("potion_info_BG").transform;
         accept = GameObject.Find("potion_accept").gameObject;
         decline = GameObject.Find("potion_decline").gameObject;
-
+        
         FH = GetComponent<scr_FileHandler>();
         m_gold = FH.GetGold();
         potion_info_Picture = GameObject.Find("potionPicture").GetComponent<SpriteRenderer>();
@@ -81,7 +81,6 @@ public class scr_AlchemyShop : MonoBehaviour
         {
             ES[i] = equipmentSlots[i].GetComponent<scr_EquipmentSlot>();
             equipedPotions[i] = FH.GetEquipedPotions(i);
-            Debug.Log(equipedPotions[i]);
             
         }
         InvetoryPotion[,] potions = FH.GetInventory();
@@ -112,15 +111,12 @@ public class scr_AlchemyShop : MonoBehaviour
                         IP.m_unlocked = true;
                         IP.m_bought = true;
                     }
-
                     l_Inventory.Add(IP);
                     SpriteRenderer sr = IP.m_obj.GetComponent<SpriteRenderer>();
-
                     if (!IP.m_bought)
                         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f);
                     if (!IP.m_unlocked)
                         sr.color = Color.black;
-
                 }
             }
         }
@@ -144,16 +140,12 @@ public class scr_AlchemyShop : MonoBehaviour
                 equipedItemIndex += 1;
             }
         }
-
-
-
         FH.WriteEquipedPotions(equipedPotions);
-
-
-
+        prevSelectedTF = selectedTransform;
         selectedTransformIndex = 0;
         potionSelected = false;
         selectedTransform = null;
+        ableToMove = false;
     }
     void CheckEscapeButtons()
     {
@@ -171,11 +163,8 @@ public class scr_AlchemyShop : MonoBehaviour
                 else if(obj.name =="OverWorld")
                 {
                     SceneManager.LoadScene("OverWorldScreen");
-
                 }
             }
-
-
         }
     }
 	void Update () 
@@ -189,9 +178,9 @@ public class scr_AlchemyShop : MonoBehaviour
         }
         if(potionSelected)    //selected transfom != null
         {
-            if (l_Inventory[selectedTransformIndex].m_bought && ableToMove )  // Move and display info for bought objects
+            if (l_Inventory[selectedTransformIndex].m_bought && ableToMove && prevSelectedTF != selectedTransform )  // Move and display info for bought objects
             {
-                MovePotion(l_Inventory[selectedTransformIndex].m_obj.transform);
+                MovePotion(l_Inventory[selectedTransformIndex].m_obj.transform );
                 DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
             }
             else
@@ -208,27 +197,20 @@ public class scr_AlchemyShop : MonoBehaviour
         }
         else  //Nothing is selected
         {
-            Debug.Log("Nothing is selected");
-            if (Input.GetMouseButton(0) == false)
+            if (!Input.GetMouseButton(0))
             {  
                selectedTransform = SelectPotion();
+                if(selectedTransform == null)
+                {
+                    prevSelectedTF = null;
+                }
+               Debug.Log("Nothing is selected");
             }
             DisplayPotionInfo(potionSelected, selectedTransformIndex, l_Inventory[selectedTransformIndex].m_bought);
         }
 	}
     public void ResetPotionPos(GameObject obj)
     {
-        for (int i = 0; i < ES.Length; i++)
-        {
-            if (ES[i].GetAttachedPotion() == obj && selectedTransform != null)
-            {
-                //selectedTransform.position = l_Inventory[selectedTransformIndex].m_originalPos;
-                //ableToMove = false;
-                //selectedTransform = null;
-                //potionSelected = false;
-                //selectedTransformIndex = 0;
-            }
-        }
         obj.transform.position = l_Inventory[selectedTransformIndex].m_originalPos;
     }
 
@@ -242,7 +224,7 @@ public class scr_AlchemyShop : MonoBehaviour
             Vector3 objectPos = Camera.main.ScreenToWorldPoint(mousePos);
             float y = objectPos.y;
             float x = objectPos.x;
-            obj.position =  Vector3.MoveTowards(obj.position,new Vector3(x, y, 0), 3.0f * Time.deltaTime);
+            obj.position =  Vector3.MoveTowards(obj.position,new Vector3(x, y, 0), 5.0f * Time.deltaTime);
         }
         else if (!Input.GetMouseButton(0))
         {
@@ -326,7 +308,7 @@ public class scr_AlchemyShop : MonoBehaviour
                     {
                         selectedTransformIndex = i;
                         ableToMove = true;
-                        selectedTransform = obj;
+                        selectedTransform = obj;  
                     }
                 }
                 if(obj == null)

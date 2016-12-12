@@ -19,7 +19,7 @@ public class scr_Vortex : MonoBehaviour
     public float m_RotationSpeed;
     public float m_deSizeSpeed;
     private CircleCollider2D m_CC;
-
+    public float m_exitScale;
 	void Start () 
     {
         m_CC = GetComponent<CircleCollider2D>();
@@ -48,6 +48,8 @@ public class scr_Vortex : MonoBehaviour
    //     m_trappedItems[y].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         m_trappedItems[y].transform.position = portal_2.transform.position;
+        m_trappedItems[y].transform.localScale = new Vector3(m_exitScale, m_exitScale, m_exitScale);
+
         Vortex.AddUntrappable(m_trappedItems[y]);
 
         m_trappedRBs.Remove(m_trappedRBs[y]);
@@ -65,7 +67,6 @@ public class scr_Vortex : MonoBehaviour
             float distance = Vector2.Distance(center.position, m_trappedItems[i].transform.position);
             Vector2 directionToCenter = center.position - m_trappedItems[i].transform.position;
             ScaleParticles(distance, i);
-          
 
             if (distance <= m_eventHorizonDistance)
             {

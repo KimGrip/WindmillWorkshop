@@ -315,7 +315,8 @@ public class scr_FileHandler : MonoBehaviour
         WindowMode = 1;
         SoundFXVolume = 0.5f;
         MusicVolume = 0.5f;
-        LatestLevelIndex = 0;
+        LatestLevelIndex = 1;
+        goldAmount = 50;
 
         for (int i = 0; i < 11; i++)
         {
