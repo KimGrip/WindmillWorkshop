@@ -17,7 +17,6 @@ public class scr_bagMovement : MonoBehaviour
     private scr_GameManager GM;
     private ParticleSystem PS;
     private ParticleSystem PSGold;
-    private ParticleSystem PSGoldShine;
     private BoxCollider2D bagThrowBoundaries;
     private BoxCollider2D BagCollider;
     public int bounces;
@@ -52,8 +51,7 @@ public class scr_bagMovement : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<scr_GameManager>();
         CS = Camera.main.GetComponent<scr_CameraScript>();
         PS = GetComponent<ParticleSystem>();
-        //PSGold = GameObject.FindGameObjectsWithTag("gold").GetComponent<ParticleSystem>();
-        //PSGoldShine = GameObject.Find("Shine").GetComponent<ParticleSystem>();
+        PSGold = GameObject.Find("goldPickup").GetComponent<ParticleSystem>();
         
 
         if (GameObject.Find("BagBoundaries").GetComponent<BoxCollider2D>() != null)
@@ -72,7 +70,7 @@ public class scr_bagMovement : MonoBehaviour
         bagRB.isKinematic = true;
         SP = gameObject.GetComponent<spawnParticles>();
         PS.Stop();
-       
+        PSGold.Stop();
 
         bagMaterial = bag.GetComponent<BoxCollider2D>().sharedMaterial;
         bagMaterial.bounciness = bouncePower;
@@ -313,18 +311,14 @@ public class scr_bagMovement : MonoBehaviour
         if (colli.gameObject.tag == "gold" && isThrown)
         {
             GM.AddGold(1);
-            //PSGold.Play();
+          //  PSGold.Play();
             //colli.gameObject.SetActive(false);
             SpriteRenderer SR = colli.GetComponent<SpriteRenderer>();
+            ParticleSystem PSS = colli.transform.FindChild("goldPickup").GetComponent<ParticleSystem>();
+            PSS.Play();
             SR.enabled = false;
             colli.enabled = false;
-            //PSGoldShine.Stop();
-            //ParticleSystem[] ps = colli.gameObject.GetComponents<ParticleSystem>();
-            //Debug.Log("ParticleSystems: " + ps.Length);
-            //ps[0].Play();
-            //ps[1].Stop();
             
-
         }
     }
 }
