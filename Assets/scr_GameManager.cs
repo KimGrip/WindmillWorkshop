@@ -287,9 +287,9 @@ public class scr_GameManager : MonoBehaviour
             }
             else if (!m_showEndGameMenu)
             {
+                Time.timeScale = 0;
                 m_showEndGameMenu = true;
                 m_oldCameraPos = m_Camera.transform.position;
-                Time.timeScale = 0;
             }
         }
     }
