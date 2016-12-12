@@ -31,7 +31,7 @@ public class scr_CameraScript : MonoBehaviour
 
 
 
-    private float m_smoothTime = 0.15f;
+    private float m_smoothTime = 0.05f;
     private Vector2 vel;
     private float shake;
     private float shakeAmount = 0;

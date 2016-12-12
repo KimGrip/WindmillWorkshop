@@ -311,9 +311,11 @@ public class scr_bagMovement : MonoBehaviour
         if (colli.gameObject.tag == "gold" && isThrown)
         {
             GM.AddGold(1);
-            PSGold.Play();
+          //  PSGold.Play();
             //colli.gameObject.SetActive(false);
             SpriteRenderer SR = colli.GetComponent<SpriteRenderer>();
+            ParticleSystem PSS = colli.transform.FindChild("goldPickup").GetComponent<ParticleSystem>();
+            PSS.Play();
             SR.enabled = false;
             colli.enabled = false;
             
