@@ -270,6 +270,12 @@ public class scr_GameManager : MonoBehaviour
     {
         return m_showEndGameMenu;
     }
+
+    public void SetEndGameStateMenu(bool active)
+    {
+        m_showEndGameMenu = active;
+    }
+
     void Update()
     {
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))
@@ -290,14 +296,14 @@ public class scr_GameManager : MonoBehaviour
                 m_showEndGameMenu = false;
                 CanvasStuff.SetGameMenuState(false);
                 Time.timeScale = 1;
-                m_Camera.transform.position = m_oldCameraPos;
+       //         m_Camera.transform.position = m_oldCameraPos;
             }
             else if (!m_showEndGameMenu)
             {
                 Debug.Log("Pause");             
                 Time.timeScale = 0;
                 m_showEndGameMenu = true;
-                m_oldCameraPos = m_Camera.transform.position;
+         //       m_oldCameraPos = m_Camera.transform.position;
             }
         }
     }

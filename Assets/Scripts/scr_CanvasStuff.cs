@@ -42,7 +42,7 @@ public class scr_CanvasStuff : MonoBehaviour
         //}
 
 
-                if (Input.GetKeyDown(KeyCode.Escape) && up == false)
+        if (Input.GetKeyDown(KeyCode.Escape) && up == false)
         {
             up = true;
         }
