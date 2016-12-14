@@ -19,7 +19,6 @@ public class scr_EquipmentSlot : MonoBehaviour
         {
             isEmpty = false;
         }
-        Debug.Log(attachedObject);
 	}
     public bool GetEquipmentSlotStatus()
     {

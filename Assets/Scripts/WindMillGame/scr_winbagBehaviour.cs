@@ -188,7 +188,6 @@ public class scr_winbagBehaviour : MonoBehaviour
                     GM.CheckEndGameConditions();
                     Debug.Log("Checking");
 
-
                 }
             }
         }

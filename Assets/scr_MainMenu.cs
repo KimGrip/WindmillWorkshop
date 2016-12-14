@@ -25,15 +25,15 @@ public class scr_MainMenu : MonoBehaviour
     private List<int> l_UpgradeStatus = new List<int>();
 	void Start () 
     {
-        fileDirectory = Application.dataPath + "/Settings.txt";
-        if (!File.Exists(fileDirectory)) // If the file is there
-        {
-            CreateSettingsFile();
-        }
-        else if(File.Exists(fileDirectory))
-        {
-            LoadSettingsFromFile();
-        }
+        //fileDirectory = Application.dataPath + "/Settings.txt";
+        //if (!File.Exists(fileDirectory)) // If the file is there
+        //{
+        //    CreateSettingsFile();
+        //}
+        //else if(File.Exists(fileDirectory))
+        //{
+        //    LoadSettingsFromFile();
+        //}
 	}
 	void Update () 
     {
@@ -119,6 +119,7 @@ public class scr_MainMenu : MonoBehaviour
             finalLevel = levelNumbers[i] * Convert.ToInt32(Math.Pow(10, levelResult.Length - i - 1));
         }
         LatestLevelIndex = finalLevel;
+        Debug.Log(finalLevel);
 
     }
     void LoadMusicVolume(StreamReader reader, string MusicFX)
@@ -229,11 +230,11 @@ public class scr_MainMenu : MonoBehaviour
 
                 if (obj.name == "Main_Menu_PLAY")
                 {
-                    LoadLatestLevel();
+                    SceneManager.LoadScene(1);
                 }
                 else if(obj.name == "Main_Menu_SHOP")
                 {
-                    SceneManager.LoadScene(12);
+                    SceneManager.LoadScene("Alchemy_Store");
                 }
                 else if (obj.name == "Main_Menu_OPTIONS")
                 {
@@ -242,6 +243,10 @@ public class scr_MainMenu : MonoBehaviour
                 else if(obj.name == "Main_Menu_OVERWORLD")
                 {
                     SceneManager.LoadScene("OverWorldScreen");
+                }
+                else if(obj.name == "Main_Menu_EXIT")
+                {
+                    Application.Quit();
                 }
             }
         }

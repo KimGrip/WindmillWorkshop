@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+
 public enum BagType
 {
     def, big, small
@@ -135,19 +136,19 @@ public class scr_GameManager : MonoBehaviour
             else if (m_EGS == EndGameState.gold)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[2], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
             else if (m_EGS == EndGameState.silver)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[1], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
             else if (m_EGS == EndGameState.bronze)
             {
                 instantiedobject = (GameObject)Instantiate(endResult[0], transform);
-                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x + 15, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
+                instantiedobject.transform.position = new Vector3(MedalSpawnPosition.position.x, MedalSpawnPosition.position.y, MedalSpawnPosition.position.z);
                 m_DisplayOnce = false;
             }
         }
@@ -205,6 +206,10 @@ public class scr_GameManager : MonoBehaviour
                 {
                     SceneManager.LoadScene("OverWorldScreen");
                 }
+                else if(obj.name == "Restart")
+                {
+                    SceneManager.LoadScene(Application.loadedLevel);
+                }
           
                 ISM.PlayButtonClick();
             }
@@ -261,6 +266,10 @@ public class scr_GameManager : MonoBehaviour
         }
         return null;
     }
+    public bool GetEndGameStateMenu()
+    {
+        return m_showEndGameMenu;
+    }
     void Update()
     {
         if (m_bagAmount > 0 && !GameObject.FindGameObjectWithTag("bag"))
@@ -276,15 +285,19 @@ public class scr_GameManager : MonoBehaviour
         {
             if (m_showEndGameMenu)
             {
+                Debug.Log("UnPause");             
+
                 m_showEndGameMenu = false;
+                CanvasStuff.SetGameMenuState(false);
                 Time.timeScale = 1;
                 m_Camera.transform.position = m_oldCameraPos;
             }
             else if (!m_showEndGameMenu)
             {
+                Debug.Log("Pause");             
+                Time.timeScale = 0;
                 m_showEndGameMenu = true;
                 m_oldCameraPos = m_Camera.transform.position;
-                Time.timeScale = 0;
             }
         }
     }
